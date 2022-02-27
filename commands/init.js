@@ -28,5 +28,10 @@ exports.handler = async argv => {
         child.execSync("bakerx run pj focal", {stdio: 'inherit'});
         let state = await VBoxManage.show(name);
         console.log(`VM is currently: ${state}`);
+        console.log(`VM is currently: ${state}`);
+        let info_cmd = 'bakerx ssh-info --format config pj'
+        const info = child.execSync(info_cmd).toString();
+        console.log("Info", info)
+        info_split = info.split("\n");
     }
 };
