@@ -16,12 +16,12 @@ exports.handler = async argv => {
     console.log(processor);
 
     if(processor == 'Arm64' ) {            
-        try{child.execSync("vm stop v1",{stdio: 'pipe'});}
+        try{child.execSync("vm stop pj",{stdio: 'pipe'});}
         catch{}
-        try{child.execSync("vm rm v1",{stdio: 'pipe'});}
+        try{child.execSync("vm rm pj",{stdio: 'pipe'});}
         catch{}
-        child.execSync("vm run v1 ubuntu:focal",{stdio: 'inherit'});
-        child.execSync("vm ssh-config v1 > config.txt")
+        child.execSync("vm run pj ubuntu:focal",{stdio: 'inherit'});
+        child.execSync("vm ssh-config pj > config.txt")
     } else {
         docker.something
     }
