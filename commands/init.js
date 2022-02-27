@@ -33,5 +33,16 @@ exports.handler = async argv => {
         const info = child.execSync(info_cmd).toString();
         console.log("Info", info)
         info_split = info.split("\n");
+        for(let i=0; i<info_split.length; i++){
+            if(i!=0){
+                temp = info_split[i].split(' ')
+                if(temp.length == 6){
+                    key = temp[4]
+                    value = temp[5]
+                    d[key] = value
+                }
+            }
+        }
+        console.log('information after retrieving', d)
     }
 };
