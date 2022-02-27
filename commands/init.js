@@ -22,8 +22,8 @@ exports.handler = async argv => {
         try{child.execSync("vm rm pj",{stdio: 'pipe'});}
         catch{}
         child.execSync("vm run pj ubuntu:focal",{stdio: 'inherit'});
-        child.execSync("vm ssh-config pj > config.txt")
-        child.execSync("cat ~/Library/'Application Support'/basicvm/key >> config.txt")
+        child.execSync("vm ssh-config pj > config.json")
+        child.execSync("echo 'path: ~/Library/Application\ Support/basicvm/key' >> config.json")
     } else {
         child.execSync("bakerx run pj focal", {stdio: 'inherit'});
         let state = await VBoxManage.show(name);
