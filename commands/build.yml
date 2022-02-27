@@ -1,6 +1,6 @@
 setup:
   - apt-get update -y
-  - apt-get install nodejs mysql wget openjdk-11-jdk -y
+  - apt-get install nodejs mysql wget openjdk-11-jdk maven -y
   - wget https://github.ncsu.edu/engr-csc326-staff/iTrust2-v10
   
 
