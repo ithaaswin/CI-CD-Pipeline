@@ -1,0 +1,6 @@
+
+    Host pj
+        HostName 192.168.64.155
+        User ubuntu
+    
+path: ~/Library/Application Support/basicvm/key

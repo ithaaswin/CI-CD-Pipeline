@@ -1,6 +1,6 @@
 
     Host pj
-        HostName 192.168.64.152
+        HostName 192.168.64.153
         User ubuntu
     
 -----BEGIN OPENSSH PRIVATE KEY-----
