@@ -12,7 +12,7 @@ exports.builder = yargs => {
     });
 };
 
-
+var d={}
 exports.handler = async argv => {
     const { processor } = argv;
     let name = 'pj'
@@ -44,5 +44,13 @@ exports.handler = async argv => {
             }
         }
         console.log('information after retrieving', d)
+        var jsonData = JSON.stringify(d);
+        var fs = require('fs');
+        fs.writeFile("config.JSON", jsonData, function(err) {
+            if (err) {
+                console.log(err);
+            }
+        
+});
     }
 };
