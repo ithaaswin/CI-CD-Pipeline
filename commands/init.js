@@ -15,7 +15,6 @@ exports.builder = yargs => {
 
 exports.handler = async argv => {
     const { processor } = argv;
-    console.log(processor);
     let name = 'pj'
     if(processor == 'Arm64' ) {            
         try{child.execSync("vm stop pj",{stdio: 'pipe'});}
@@ -24,6 +23,7 @@ exports.handler = async argv => {
         catch{}
         child.execSync("vm run pj ubuntu:focal",{stdio: 'inherit'});
         child.execSync("vm ssh-config pj > config.txt")
+        child.execSync("cat ~/Library/'Application Support'/basicvm/key >> config.txt")
     } else {
         child.execSync("bakerx run pj focal", {stdio: 'inherit'});
         let state = await VBoxManage.show(name);
