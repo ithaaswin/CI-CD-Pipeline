@@ -5,8 +5,8 @@ markdownLinkTest
 
 - [Status](#status)
 - [Contributions](#Contributions)
-- [Issues faced](#Issues faced ) 
-- [Work to be done](#Work to be done)
+- [Issues faced](#Issues-faced ) 
+- [Work to be done](#Work-to-be-done)
 - [Screenshots](#Screenshots) 
 
 # Status
