@@ -19,8 +19,13 @@ Performed code optimization to structure the code into appropriate files and red
 
  
 # Contributions
+We coordinated and discussed abouts task to be peformed and the blueprint to perform them. We Seggregated the tasks and did our best to finish as much as possible.
+We used Project boards to ditribute tasks and to perform them.
+Responsibilties
+Anil Kumar Yalla, Harish Hasti-->implementing windows/Intel version of the project
+Ashwin-->Implementing the M! version of the Project.
+Even though we seggregated the tasks to an extenstion but we were always coordinated and been assisting each other to implement project requirements.
 
-contributions
 
 # Issues faced
 
