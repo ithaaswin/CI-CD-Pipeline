@@ -28,5 +28,8 @@ Error -- Process Captured Error happening when build is re executed. Not happeni
 
 <img src="/Pictures/Errors/Process%20Captured%20Error.png" width="400">
 
+-- Successfully runned init and configuration is being saved into config.json and vm is created.
+<img src="/Pictures/Success/init.png" width="400">
+
 -- Able to run the set up and install the iTrust inside the vm. Jobs are need to be fully defined to finish the project.
-<img src="/Pictures/Errors/iTrustInstalled.png" width="400">
+<img src="/Pictures/Success/iTrustInstalled.png" width="400">
