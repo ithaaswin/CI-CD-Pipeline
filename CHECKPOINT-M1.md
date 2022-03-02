@@ -1,6 +1,3 @@
-# Link to the google doc - https://docs.google.com/document/d/1bllr1XzT1ITnWrJLnlQhKb7howaiI0E-bwBZg5gBw6s/edit
-
--- Aswin
 For MAC - M1
 
 Error -- Basicvm was not detected when init file was run
@@ -18,3 +15,18 @@ Fix -- Used 'pipe' to avoid pushing the default lines.
 Code Optimization -- Implementing mac and windows versions code in provision file
 
 json -- Parsed the required data and saved the details into a dictionary. Eventually this will be saved into the config.json file
+
+Error -- There was a TimeZone difference error when trying to download or even update the apt package as shown below.
+<img src="/Pictures/Errors/TimeZone.png" width="400" >
+
+Fix -- Resolved this using the command:
+vm exec pj 'sudo apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update'
+
+But this error is repeating each time a new vm is created.
+
+Error -- Process Captured Error happening when build is re executed. Not happening for a new vm. Yet to find the root cause for this issue.
+
+<img src="/Pictures/Errors/Process%20Captured%20Error.png" width="400">
+
+-- Able to run the set up and install the iTrust inside the vm. Jobs are need to be fully defined to finish the project.
+<img src="/Pictures/Errors/iTrustInstalled.png" width="400">
