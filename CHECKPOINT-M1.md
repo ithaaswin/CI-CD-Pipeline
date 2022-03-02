@@ -5,8 +5,8 @@ markdownLinkTest
 
 - [Status](#status)
 - [Contributions](#Contributions)
-- [Issues faced](#Issues Faced ) 
-- [Work To be done](#To do)
+- [Issues faced](#Issues faced ) 
+- [Work to be done](#Work to be done)
 - [Screenshots](#Screenshots) 
 
 # Status
@@ -23,7 +23,7 @@ Donec hendrerit nisl sed ipsum hendrerit, eget molestie ante porttitor. Ut sed c
 
 Morbi ultrices at mi a fringilla. Nulla magna risus, pellentesque in adipiscing at, fermentum ut dolor. Donec sollicitudin ut magna non aliquam. Aenean vulputate vitae est quis dapibus. Aenean laoreet diam justo, at consequat nisi pellentesque ut. Ut molestie vulputate urna eu viverra. Praesent id commodo nisl. Aliquam quis consectetur nibh. Aenean ultricies pellentesque elit lacinia gravida. Cras a auctor magna.
 
-# To do
+# Work to be done
 
 Donec in elementum ante, eu aliquet orci. Maecenas non venenatis ante. Etiam vel sollicitudin diam, a sodales sem. Aenean interdum quam commodo porta sagittis. Curabitur non aliquam odio. Nam pharetra tempor purus, sit amet iaculis odio placerat id. Sed hendrerit consequat lorem quis faucibus. Aenean eu eros ante. Nulla nec nunc id eros consequat dictum.
 # Screenshots
