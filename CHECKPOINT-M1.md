@@ -1,4 +1,4 @@
-markdownLinkTest
+Team 14  --> CheckPoint
 ================
 
 # Contents
@@ -21,19 +21,8 @@ We are storing the network configuration details like host, ip address, ssh info
 
 
 
-#Issues faced
+# Issues faced
 
-
-
-
-
-# Work to be done
- we have parsed the build.yaml file as json object and executed as script file similar to CLI, we are planning to optimise the code using Ansible</br>
- We are planning to write opunit to verify whether the installation and version checks of all the softwares required for running itrust</br>
- We have to implement the build jobs using Ansible(currently working on this>).
- We have to configure .env file with appropriate details.
-
-# Screenshots
 
 Issues faced by windows users
 .env file not detected and package json error
@@ -43,7 +32,6 @@ Arranging network data from bakerx to dictionary and exporting it to config.Json
 And also for basicvm
 //detecting os and call the specific createVM machine
 when we assign vm name to a variable"name" , we are getting name clash with "js-yaml" to avoid we used vm_name, and trying to push it to env file
-
 
 // status= trying to implement CM using ansible
 For MAC - M1
@@ -75,6 +63,20 @@ But this error is repeating each time a new vm is created.
 Error -- Process Captured Error happening when build is re executed. Not happening for a new vm. Yet to find the root cause for this issue.
 
 <img src="/Pictures/Errors/Process%20Captured%20Error.png" width="400">
+
+
+
+# Work to be done
+ we have parsed the build.yaml file as json object and executed as script file similar to CLI, we are planning to optimise the code using Ansible</br>
+ We are planning to write opunit to verify whether the installation and version checks of all the softwares required for running itrust</br>
+ We have to implement the build jobs using Ansible(currently working on this>).
+ We have to configure .env file with appropriate details.
+
+# Screenshots
+
+
+
+
 
 -- Successfully ran init and configuration is being saved into config.json and vm is created.
 <img src="/Pictures/Success/init.png" width="400">
