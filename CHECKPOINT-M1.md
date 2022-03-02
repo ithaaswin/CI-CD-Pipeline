@@ -23,7 +23,7 @@ We coordinated and discussed abouts task to be peformed and the blueprint to per
 We used Project boards to ditribute tasks and to perform them.
 Responsibilties
 Anil Kumar Yalla, Harish Hasti-->implementing windows/Intel version of the project
-Ashwin-->Implementing the M! version of the Project.
+Aswin Itha-->Implementing the Mac M1 version of the Project.
 Even though we seggregated the tasks to an extenstion but we were always coordinated and been assisting each other to implement project requirements.
 
 
