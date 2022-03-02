@@ -8,7 +8,7 @@ And also for basicvm
 when we assign vm name to a variable"name" , we are getting name clash with "js-yaml" to avoid we used vm_name, and trying to push it to env file
 
 
-
+// status= trying to implement CM using ansible
 For MAC - M1
 
 Error -- Basicvm was not detected when init file was run
