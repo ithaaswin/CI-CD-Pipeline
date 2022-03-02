@@ -1,3 +1,13 @@
+Issues faced by windows users
+.env file not detected and package json error
+git issues for push and commit 
+getting vm status
+Arranging network data from bakerx to dictionary and exporting it to config.Json
+And also for basicvm
+//detecting os and call the specific createVM machine
+
+
+
 For MAC - M1
 
 Error -- Basicvm was not detected when init file was run
