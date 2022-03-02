@@ -3,12 +3,13 @@ Team 14  --> CheckPoint
 
 # Contents
 
-- [Status](#status)
-- [Contributions](#Contributions)
-- [Issues faced](#Issues-faced) 
-- [Work to be done](#Work-to-be-done)
-- [Screenshots](#Screenshots) 
+- [Status](#stat)
+- [Contributions](#Contrib)
+- [Issues faced](#Issue) 
+- [Work to be done](#tobedone)
+- [Screenshots](#Screen) 
 
+<a name="stat"></a>
 # Status
 We have implemented the below details for both M1 process and Inel processor.</br>
  We have currenty finished the stage 1 of the project, but have to optimise and stucture the code based on requirements.</br>
@@ -17,7 +18,10 @@ We are fetching the name of the Virtual Machine from .env file(we can simply edi
 We are storing the network configuration details like host, ip address, ssh info in config.JSON file.</br>
 Performed code optimization to structure the code into appropriate files and reducded code redundancy.
 
- 
+The status of our tasks, issues and discussions can be found at [Project Board](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/projects/1)
+
+
+<a name="Contrib"></a>
 # Contributions
 We coordinated and discussed abouts task to be peformed and the blueprint to perform them. We Seggregated the tasks and did our best to finish as much as possible.
 We used Project boards to ditribute tasks and to perform them.
@@ -27,6 +31,7 @@ Aswin Itha-->Implementing the Mac M1 version of the Project.
 Even though we seggregated the tasks to an extenstion but we were always coordinated and been assisting each other to implement project requirements.
 
 
+<a name="Issue"></a>
 # Issues faced
 
 
@@ -59,12 +64,16 @@ But this error is repeating each time a new vm is created.</br>
 
 <img src="/Pictures/Errors/Process%20Captured%20Error.png" width="700" height="400"></br>
 
+
+<a name="tobedone"></a>
 # Work to be done
  we have parsed the build.yaml file as json object and executed as script file similar to CLI, we are planning to optimise the code using Ansible</br>
  We are planning to write opunit to verify whether the installation and version checks of all the softwares required for running itrust</br>
  We have to implement the build jobs using Ansible(currently working on this>).
  We have to configure .env file with appropriate details.
 
+
+<a name="Screen"></a>
 # Screenshots
 Intel Processor/Windows Os</br>
 1)Pipeline Init Success and saving configuration details to config.JSON</br>
