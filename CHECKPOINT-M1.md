@@ -5,6 +5,7 @@ getting vm status
 Arranging network data from bakerx to dictionary and exporting it to config.Json
 And also for basicvm
 //detecting os and call the specific createVM machine
+when we assign vm name to a variable"name" , we are getting name clash with "js-yaml" to avoid we used vm_name, and trying to push it to env file
 
 
 
