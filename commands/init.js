@@ -1,6 +1,9 @@
 const chalk = require('chalk');
 const path = require('path');
 const createVM = require('../lib/provision')
+//const dotenv = require('dotenv');
+//dotenv.config();
+//let vm_name = process.env.vm_name;
 
 
 exports.command = 'init';
@@ -13,11 +16,10 @@ exports.builder = yargs => {
 var d={}
 exports.handler = async argv => {
     const { processor } = argv;
-    let name = 'pj'
     if(processor == 'Arm64' ) {            
-        createVM.mac(name);
+        createVM.mac(vm_name);
     } 
     else {
-        createVM.windows(name);   
+        createVM.windows(process.env.vm_name);   
     }
 };

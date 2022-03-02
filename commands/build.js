@@ -5,7 +5,6 @@ exports.command = 'build <job_name> <build_path>';
 exports.desc = 'runs the build command and executes the job from given file';
 
 exports.handler = async argv => {
-    const vm_name = 'pj';
     const{job_name, build_path, processor} = argv;
     console.log(job_name);
     console.log(build_path);
