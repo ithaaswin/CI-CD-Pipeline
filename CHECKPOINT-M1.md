@@ -43,18 +43,16 @@ Issues faced for M1 processor</br>
 4)Error -- When the vm with the default name is not available, it is spitting vm no available in to the console. --> Fix -- Used 'pipe' to avoid pushing the default lines.</br>
 
 5)Error -- There was a TimeZone difference error when trying to download or even update the apt package as shown below.</br>
-<img src="/Pictures/Errors/TimeZone.png" width="400" >
+<img src="/Pictures/Errors/TimeZone.png" width="700" height="400" ></br>
 
 Fix -- Resolved this using the command:</br>
 vm exec pj 'sudo apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update'</br>
 
 But this error is repeating each time a new vm is created.</br>
 
-6)Error -- Process Captured Error happening when build is re executed. Not happening for a new vm. Yet to find the root cause for this issue.
+6)Error -- Process Captured Error happening when build is re executed. Not happening for a new vm. Yet to find the root cause for this issue.</br>
 
-<img src="/Pictures/Errors/Process%20Captured%20Error.png" width="400">
-
-
+<img src="/Pictures/Errors/Process%20Captured%20Error.png" width="700" height="400"></br>
 
 # Work to be done
  we have parsed the build.yaml file as json object and executed as script file similar to CLI, we are planning to optimise the code using Ansible</br>
@@ -64,15 +62,20 @@ But this error is repeating each time a new vm is created.</br>
 
 # Screenshots
 Intel Processor/Windows Os</br>
-1)Pipeline Init Success and saving configuration details to config.JSON
+1)Pipeline Init Success and saving configuration details to config.JSON</br>
+<img src="https://media.github.ncsu.edu/user/22767/files/e109ed65-49db-41e3-b7f2-dda10003d88c" width="700" height="400"></br>
+2) Pipeline Build screenshot indicating Installation of Tools/itrust clone in Virtual machine.(Not done completely).</br>
+<img src="https://media.github.ncsu.edu/user/22767/files/0a1d03f2-76b5-445c-93a1-5e700e862970" width="700" height="400"></br>
+3) Screenshot showing versions of software</br>
+<img src="https://media.github.ncsu.edu/user/22767/files/ebd938da-a062-458b-994f-854f5580c16e" width="700" height="400"></br>
 
+M1 processor</br>
+1)Successfully ran init and configuration is being saved into config.json and vm is created.</br>
+<img src="/Pictures/Success/init.png" width="700"height="400"></br>
 
+2)Able to run the set up and install the iTrust inside the vm. Jobs are need to be fully defined to finish the project.</br>
+<img src="/Pictures/Success/iTrustInstalled.png" width="700" height="400"></br>
 
-M! processor-->Successfully ran init and configuration is being saved into config.json and vm is created.
-<img src="/Pictures/Success/init.png" width="400">
-
--- Able to run the set up and install the iTrust inside the vm. Jobs are need to be fully defined to finish the project.
-<img src="/Pictures/Success/iTrustInstalled.png" width="400">
 
 
 
