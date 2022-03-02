@@ -76,7 +76,7 @@ Intel Processor/Windows Os</br>
 
 M1 processor</br>
 1)Successfully ran init and configuration is being saved into config.json and vm is created.</br>
-<img src="/Pictures/Success/init.png" width="700"height="400"></br>
+<img src="/Pictures/Success/init.png" width="700" height="400"></br>
 
 2)Able to run the set up and install the iTrust inside the vm. Jobs are need to be fully defined to finish the project.</br>
 <img src="/Pictures/Success/iTrustInstalled.png" width="700" height="400"></br>
