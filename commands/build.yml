@@ -1,21 +1,16 @@
 setup:
-  - apt-get update -y
-  - apt-get install nodejs mysql wget openjdk-11-jdk maven -y
-  - wget https://github.ncsu.edu/engr-csc326-staff/iTrust2-v10
-  
+  - "sudo apt-get update"
+  - "sudo apt-get install nodejs"
+  - "sudo apt-get install mysql"
+  - "sudo apt-get install wget"
+  - "sudo apt-get install openjdk-11-jdk"
+  - "sudo apt-get install maven"
+  - "wget https://github.ncsu.edu/engr-csc326-staff/iTrust2-v10"
 
-# setup: 
-#   - CMD, VARIBLE, PACKAGE NAME, or DATA
-#   - {package: mysql, version: 8.0}
-#   - apt-get install mysql -y
-#   - java11, nodejs, wget
-#   - URL=https://github.ncsu.edu/engr-csc326-staff/iTrust2-v10
-#   - ...
-
-# jobs:
-#   - name: build-itrust
-#     steps: 
-#       - name: cmd name
-#         run: [CMD]
-#       - name: step name
-#         run: cd iTrust2 && mvn --batch-mode --update-snapshots clean test
+jobs:
+  - name: build-itrust
+    steps:
+      - name: cmd name
+        run: [CMD]
+      - name: step name
+        run: cd iTrust2 && mvn --batch-mode --update-snapshots clean test
