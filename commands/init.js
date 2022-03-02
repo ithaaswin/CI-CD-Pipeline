@@ -1,9 +1,9 @@
 const chalk = require('chalk');
 const path = require('path');
 const createVM = require('../lib/provision')
-//const dotenv = require('dotenv');
-//dotenv.config();
-//let vm_name = process.env.vm_name;
+const dotenv = require('dotenv');
+dotenv.config();
+let vm_name = process.env.vm_name;
 
 
 exports.command = 'init';
