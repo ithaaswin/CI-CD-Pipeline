@@ -6,7 +6,7 @@ exports.desc = 'runs the build command and executes the job from given file';
 
 exports.handler = async argv => {
     const{job_name, build_path, processor} = argv;
-    console.log(job_name);
+    console.log('Job Name', job_name);
     console.log(build_path);
     console.log(processor);
     if(processor == 'Arm64' ) {            
