@@ -4,8 +4,6 @@ const createVM = require('../lib/provision')
 const dotenv = require('dotenv');
 dotenv.config();
 let vm_name = process.env.vm_name;
-console.log('VM Name', vm_name)
-
 exports.command = 'init';
 exports.desc = 'Prepare tool';
 exports.builder = yargs => {
