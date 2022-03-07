@@ -1,4 +1,5 @@
-[Web] 
-127.0.0.1 ansible_ssh_user=192.345.245.12  ansible_ssh_private_key_file=C:\Users\anilk\.bakerx\insecure_private_key 
-[web:vars] 
+[web]
+192.168.64.9 ansible_ssh_user=ubuntu ansible_ssh_private_key_file=~/Library/'Application Support'/basicvm/key
+[web:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
+ansible_python_interpreter=/usr/bin/python3

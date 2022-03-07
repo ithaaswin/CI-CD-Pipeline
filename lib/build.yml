@@ -1,0 +1,12 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+  - name: ping all hosts
+    tags: ping
+    ping:
+  - name: sudo apt-get update
+    tags: apt-update
+    become: yes
+    apt:
+      update_cache: yes
