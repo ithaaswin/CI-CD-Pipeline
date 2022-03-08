@@ -1,5 +1,5 @@
 [web]
-192.168.52.100 ansible_ssh_user=vagrant ansible_ssh_private_key_file=C:\Users\anilk\.bakerx\insecure_private_key
+192.168.52.100 ansible_ssh_user=vagrant ansible_ssh_private_key_file=~/.ssh/vm-server
 [web:vars]
 ansible_ssh_common_args='-o StrictHostKeyChecking=no'
 ansible_python_interpreter=/usr/bin/python3
