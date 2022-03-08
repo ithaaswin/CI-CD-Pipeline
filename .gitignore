@@ -1,5 +1,5 @@
 node_modules/
 .env
 config.json
-config
-config.pub
+vm-server
+vm-server.pub
