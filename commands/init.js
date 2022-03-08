@@ -18,6 +18,6 @@ exports.handler = async argv => {
         createVM.mac(vm_name);
     } 
     else {
-        createVM.windows(process.env.vm_name);   
+        createVM.windows(vm_name);   
     }
 };
