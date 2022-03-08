@@ -1,12 +1,14 @@
 ---
 - hosts: all
   gather_facts: no
+  tags: iTrust
   tasks:
   - name: ping all hosts
-    tags: ping
     ping:
-  - name: sudo apt-get update
-    tags: apt-update
+  - name: apt-get update
     become: yes
     apt:
       update_cache: yes
+  - name: install nodejs
+    apt: nodejs
+  
