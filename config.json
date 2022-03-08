@@ -1,1 +1,1 @@
-{"Host":"pj","HostName":"192.168.52.100","User":"vagrant","keyPath":"~/.ssh/vm-server","vm_port":"2002","config_port":"2003"}
+{"Host":"pj","HostName":"192.168.52.100","User":"vagrant","keyPath":"~/.ssh/vm-server","vm_port":"2002","config_port":"2003","loopback_ip":"127.0.0.1"}
