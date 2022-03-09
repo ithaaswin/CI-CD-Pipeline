@@ -1,12 +1,50 @@
 ---
 - hosts: all
   gather_facts: no
+
+  tags: iTrust
   tasks:
   - name: ping all hosts
-    tags: ping
     ping:
-  - name: sudo apt-get update
-    tags: apt-update
+  - name: apt-get update
     become: yes
     apt:
       update_cache: yes
+  - name: Install nodejs
+    become: yes
+    apt:
+      pkg: nodejs
+      state: present
+  - name: Install wget
+    become: yes
+    apt:
+      pkg: wget
+      state: present
+  - name: Install openjdk-11-jdk
+    become: yes
+    apt:
+     pkg: openjdk-11-jdk
+     state: present
+  - name: Install git
+    become: yes
+    apt:
+      pkg: git
+      state: present
+  - name: Install mysql-server
+    become: yes
+    apt:
+      pkg: mysql-server
+      state: present
+  - name: Install maven
+    become: yes
+    apt:
+      pkg: maven
+      state: present
+
+  - name: Clone itrust
+    become: yes
+    git:
+      repo: https://{{git_user|urlencode()}}:{{git_pass|urlencode()}}@github.ncsu.edu/engr-csc326-staff/iTrust2-v10
+      clone: yes
+      update: yes
+      dest: "/home/ubuntu/iTrust"
