@@ -18,6 +18,7 @@ exports.handler = async argv => {
         createVM.mac(vm_name);
     } 
     else {
+        console.log(chalk.green(`Windows machine detected and processor is ${processor}`))
         createVM.windows(vm_name);   
     }
 };
