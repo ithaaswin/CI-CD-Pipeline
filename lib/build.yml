@@ -35,6 +35,11 @@
     apt:
       pkg: mysql-server
       state: present
+  - name: Install mysql-client
+    become: yes
+    apt:
+      pkg: mysql-client
+      state: present
   - name: Install maven
     become: yes
     apt:
