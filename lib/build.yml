@@ -29,3 +29,9 @@
         clone: yes
         update: yes
         dest: "/home/ubuntu/iTrust"
+
+    - name: Make sure mysql is running
+      service:
+        name: mysql
+        state: started
+        enabled: True
