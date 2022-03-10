@@ -2,49 +2,30 @@
 - hosts: all
   gather_facts: no
 
-  tags: iTrust
-  tasks:
-  - name: ping all hosts
-    ping:
-  - name: apt-get update
-    become: yes
-    apt:
-      update_cache: yes
-  - name: Install nodejs
-    become: yes
-    apt:
-      pkg: nodejs
-      state: present
-  - name: Install wget
-    become: yes
-    apt:
-      pkg: wget
-      state: present
-  - name: Install openjdk-11-jdk
-    become: yes
-    apt:
-     pkg: openjdk-11-jdk
-     state: present
-  - name: Install git
-    become: yes
-    apt:
-      pkg: git
-      state: present
-  - name: Install mysql-server
-    become: yes
-    apt:
-      pkg: mysql-server
-      state: present
-  - name: Install maven
-    become: yes
-    apt:
-      pkg: maven
-      state: present
+  vars: 
+    packages:
+      - gcc
+      - debconf-utils
+      - git
+      - nodejs
+      - maven
+      - wget
+      - mysql-server
+      - mysql-client
+      - python3-pymysql
+  
+  tags: itrust
+  tasks: 
+    - name: Install required packages for iTrust
+      apt: pkg={{item}} state=present update_cache=yes
+      become: yes
+      with_items: "{{packages}}"
 
-  - name: Clone itrust
-    become: yes
-    git:
-      repo: https://{{git_user|urlencode()}}:{{git_pass|urlencode()}}@github.ncsu.edu/engr-csc326-staff/iTrust2-v10
-      clone: yes
-      update: yes
-      dest: "/home/ubuntu/iTrust"
+    - name: Clone itrust
+      tags: itrust
+      become: yes
+      git:
+        repo: https://{{ git_user|urlencode() }}:{{ git_token|urlencode() }}@github.ncsu.edu/engr-csc326-staff/iTrust2-v10
+        clone: yes
+        update: yes
+        dest: "/home/ubuntu/iTrust"
