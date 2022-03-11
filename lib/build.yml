@@ -43,20 +43,19 @@
     - name: copy .my.cnf file with mysql root password credentials
       template: src=my.cnf.j2 dest="/root/.my.cnf owner=root mode=0777"
 
-    - name: Change the Authentication plugin of MySQL root user to mysql_native_password
-      shell: mysql -u root -e 'UPDATE mysql.user SET plugin="mysql_native_password" WHERE user="root" AND host="localhost"'
-    
     - name: Flush Privileges
       shell: "mysql -u root -e 'FLUSH PRIVILEGES'"
-      
-    - name: Set MySQL root password
-      community.mysql.mysql_user:
-        login_host: 'localhost'
-        login_user: 'root'
-        login_password: ''
-        name: 'root'
-        password: 'root'
+
+    - name: Create user anil
+      become: yes
+      mysql_user:
+        name: "anil"
+        password: "abcd"
+        host: localhost
         state: present
+        update_password: on_create
+        priv: "*.*:ALL,GRANT"
+        login_unix_socket: /var/run/mysqld/mysqld.sock
 
     - name: Change the Template of yml 
       shell: cp /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml.template /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
@@ -64,11 +63,18 @@
     - name: Change the write mode of application.yml
       shell: chmod 777 /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
       
-    - name: Change the username and password
+    - name: change the username
       replace: 
         path: /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
-        regexp: '^\s\s\s\spassword:'
-        replace: '    password: root'
+        regexp: '^\s\s\s\susername:.*'
+        replace: '    username: anil'
+        backup: yes
+
+    - name: change the password
+      replace: 
+        path: /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
+        regexp: '^\s\s\s\spassword:.*'
+        replace: '    password: abcd'
         backup: yes
 
     - name: clean mvn install dependencies
@@ -88,6 +94,15 @@
         
     - name: Display the output of test
       debug: msg="{{ testresult.stdout_lines[-15:] }}"
+      
+    - name: delete user anil
+      become: yes
+      mysql_user:
+        name: "anil"
+        password: "abcd"
+        host: localhost
+        state: absent
+        login_unix_socket: /var/run/mysqld/mysqld.sock
 
 - hosts: all
   gather_facts: no
