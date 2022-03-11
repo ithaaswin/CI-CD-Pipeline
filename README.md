@@ -70,6 +70,15 @@ The above command calls build.js which calls builder.js and execute the jobs def
 ## Checkpoint and Milestone Report
 
 ### Challenges Faced:
-*   
+##### For MAC M1
+*   Installing Ansible on MAC M1 was simple but Ansible was throwing different errors than when using json file and to parse and running commands on build server.
+*   Initially Ansible was running build.yml smoothly. Then [package not found error]() started appearing. The error was not self explanatory as the error was sporadic and root cause was not found.
+*   Sometimes [DPKG was locked]() and Ansible couldn't complete installation process. This happened because before dpkg was released after an installation another package was trying to access it.
+*   [DPKG process captured]() happens if I force quit build server while an installtion is happening. Manually to resolve this, we need to find the PID capturing the dpkg and force stop the proces.
+*   Finally to resolve the above errors, I found that one of the reasons was that my build server was not able to contact [ports.ubuntu.com](). This is one of the prime reasons why the package missing was also occuring. I was stuck at this point for about 3 full days. There were not really helpful resources available even online on this issue as this is happening only with MAC M1.
+*   I tried to automate the process of updating nameserver in init.js but the resolv.conf is being re-written once the ssh command execution is complete and the process is ending.
+*   Used Ansible playbook to finish this process. This is exclusive to MAC M1.
+*   Sometimes faced dpkg locked error even before the first process is executed. So, automated the process of removing lock whenever build.yml is called.
+*   Made sure that each time a init is ran, a new vm instance is created. If an old vm with same name is available, it is removed without any user interruption.
 
 <a name = "screencast_tag"></a>
