@@ -71,15 +71,23 @@
         replace: '    password: root'
         backup: yes
 
-    - name: Clean mvn install dependencies
+    - name: clean mvn install dependencies
       command: "sudo mvn clean install"
+      register: installresult
       args: 
         chdir: /home/ubuntu/iTrust/iTrust2
-      
-    - name: Test the application 
+
+    - name: Display the output of mvn install
+      debug: msg="{{ installresult.stdout_lines[-8:] }}"
+
+    - name: test the application 
       command: "sudo mvn --batch-mode --update-snapshots clean test"
+      register: testresult
       args:
         chdir: /home/ubuntu/iTrust/iTrust2
+        
+    - name: Display the output of test
+      debug: msg="{{ testresult.stdout_lines[-15:] }}"
 
 - hosts: all
   gather_facts: no
