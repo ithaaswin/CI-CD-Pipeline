@@ -5,12 +5,29 @@
 | [Create a build job specification (20%)](#buildjob_tag) | [Click Here]() |
 | [Automatically configure a build environment for given build job specification (30%)](#buildenv_tag) | [Click Here]() |
 | [Checkpoint and milestone report (20%)](#milestone_tag) | [Click Here]() |
-| [Screencast (10%)](#screencast_tag) | [Click Here() ]|
+| [Screencast (10%)](#screencast_tag) | [Click Here]()|
 
 
 <a name = "provision_tag"></a>
 ## Automatically provision and configure a build server
 
+```MAC M1 requirements```
+```text
+brew
+basicvm
+Ubuntu:Jammy Image
+Ansible
+Ansible mysql module
+```
+``` bash
+$ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"                                        # To install brew
+$ brew install ottomatica/ottomatica/basicvm          # To install basicvm
+$ vm pull                                             # To install Ubuntu:Jammy image -- Downloads to ~/.basicvm/BaseImages/Ubuntu/Jammy
+$ brew install ansible                                # To Install Ansible
+$ ansible-galaxy collection install community.mysql   # To install mysql module for playbook
+```
+
+```.env```
 ```bash
 # Add the following env variables for any OS
 vm_name = Name_Of_VM
@@ -70,6 +87,10 @@ The above command calls build.js which calls builder.js and execute the jobs def
 ## Checkpoint and Milestone Report
 
 ### Challenges Faced:
+
+Our Task Board can be found [here]().
+
+The CHECKPOINT.md file submitted for this milestone is available [here]().
 ##### For MAC M1
 *   Installing Ansible on MAC M1 was simple but Ansible was throwing different errors than when using json file and to parse and running commands on build server.
 *   Initially Ansible was running build.yml smoothly. Then [package not found error]() started appearing. The error was not self explanatory as the error was sporadic and root cause was not found.
@@ -82,3 +103,7 @@ The above command calls build.js which calls builder.js and execute the jobs def
 *   Made sure that each time a init is ran, a new vm instance is created. If an old vm with same name is available, it is removed without any user interruption.
 
 <a name = "screencast_tag"></a>
+
+[Click Here]() for Screencast of MAC M1
+
+[Click Here]() for Screencast of Windows
