@@ -5,72 +5,96 @@
 
   vars: 
     packages:
-      - gcc
-      - debconf-utils
       - git
       - nodejs
+      - mysql-server
       - maven
       - wget
-      - mysql-server
-      - mysql-client
-      - python3-pymysql
       - openjdk-11-jdk
-  
-  tags: iTrust
-  tasks: 
+      - python3-pymysql
+      
+  tags: itrust-build
+  tasks:
+
+    - name: Kill Existing dpkg process
+      become: yes
+      file:
+        state: absent
+        path: "/var/lib/dpkg/lock"
+    
     - name: Install required packages for iTrust
       apt: pkg={{item}} state=present update_cache=yes
       become: yes
       with_items: "{{packages}}"
+    
     - name: Clone itrust
-      tags: itrust
-      become: yes
       git:
-        repo: https://{{ git_user|urlencode() }}:{{ git_token|urlencode() }}@github.ncsu.edu/engr-csc326-staff/iTrust2-v10
+        repo: https://{{ git_user|urlencode() }}:{{ git_token|urlencode() }}@github.ncsu.edu/engr-csc326-staff/iTrust2-v10.git
         clone: yes
         update: yes
         dest: "/home/ubuntu/iTrust"
-    - name: Make sure mysql is running
+    
+    - name: Get mysql up and running
       service:
         name: mysql
         state: started
         enabled: True
+
     - name: copy .my.cnf file with mysql root password credentials
-      template: src=my.cnf.j2 dest=/root/.my.cnf owner=root mode=0777 
-      become: yes
-    - name: Change the authentication plugin of MySQL root user to mysql_native_password
+      template: src=my.cnf.j2 dest="/root/.my.cnf owner=root mode=0777"
+
+    - name: Change the Authentication plugin of MySQL root user to mysql_native_password
       shell: mysql -u root -e 'UPDATE mysql.user SET plugin="mysql_native_password" WHERE user="root" AND host="localhost"'
-      become: yes
+    
     - name: Flush Privileges
-      shell: mysql -u root -e 'FLUSH PRIVILEGES'
-      become: yes
+      shell: "mysql -u root -e 'FLUSH PRIVILEGES'"
+      
     - name: Set MySQL root password
-      mysql_user:
+      community.mysql.mysql_user:
         login_host: 'localhost'
         login_user: 'root'
         login_password: ''
         name: 'root'
         password: 'root'
         state: present
-    - name: change the template of yml 
+
+    - name: Change the Template of yml 
       shell: cp /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml.template /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
-      become: yes
-    - name: change the write mode of application.yml
+      
+    - name: Change the write mode of application.yml
       shell: chmod 777 /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
-      become: yes
-    - name: change the username and password
+      
+    - name: Change the username and password
       replace: 
         path: /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
         regexp: '^\s\s\s\spassword:'
         replace: '    password: root'
         backup: yes
-    - name: clean mvn install dependencies
+
+    - name: Clean mvn install dependencies
       command: "sudo mvn clean install"
       args: 
         chdir: /home/ubuntu/iTrust/iTrust2
-      become: yes
-    - name: test the application 
+      
+    - name: Test the application 
       command: "sudo mvn --batch-mode --update-snapshots clean test"
       args:
         chdir: /home/ubuntu/iTrust/iTrust2
-      
+
+- hosts: all
+  gather_facts: no
+  become: yes
+
+  tags: nameserver
+  tasks:
+    - name: Adding nameserver-1
+      lineinfile:
+        path: /etc/resolv.conf
+        insertbefore: BOF
+        line: 'nameserver 8.8.4.4'
+
+    - name: Adding nameserver-2
+      lineinfile:
+        path: /etc/resolv.conf
+        insertbefore: BOF
+        line: 'nameserver 8.8.8.8'
