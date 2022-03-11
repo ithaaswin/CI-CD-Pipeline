@@ -52,3 +52,25 @@
         name: 'root'
         password: 'root'
         state: present
+    - name: change the template of yml 
+      shell: cp /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml.template /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
+      become: yes
+    - name: change the write mode of application.yml
+      shell: chmod 777 /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
+      become: yes
+    - name: change the username and password
+      replace: 
+        path: /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
+        regexp: '^\s\s\s\spassword:'
+        replace: '    password: root'
+        backup: yes
+    - name: clean mvn install dependencies
+      command: "sudo mvn clean install"
+      args: 
+        chdir: /home/ubuntu/iTrust/iTrust2
+      become: yes
+    - name: test the application 
+      command: "sudo mvn --batch-mode --update-snapshots clean test"
+      args:
+        chdir: /home/ubuntu/iTrust/iTrust2
+      
