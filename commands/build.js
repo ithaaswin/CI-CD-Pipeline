@@ -1,5 +1,3 @@
-const chalk = require("chalk");
-// const path = require("path");
 const builder =require("../lib/builder")
 exports.command = 'build <job_name> <build_path>';
 exports.desc = 'runs the build command and executes the job from given file';

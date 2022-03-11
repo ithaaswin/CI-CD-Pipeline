@@ -15,7 +15,7 @@ var d={}
 exports.handler = async argv => {
     const { processor } = argv;
     if(processor == 'Arm64' ) {            
-        await createVM.mac(vm_name);
+        await createVM.mac();
     } 
     else {
         await createVM.windows(vm_name);   
