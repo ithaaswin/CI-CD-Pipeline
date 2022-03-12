@@ -46,11 +46,11 @@
     - name: Flush Privileges
       shell: "mysql -u root -e 'FLUSH PRIVILEGES'"
 
-    - name: Create user anil
+    - name: Create new user
       become: yes
       mysql_user:
-        name: "anil"
-        password: "abcd"
+        name: "{{ db_user }}"
+        password: "{{ db_pass }}"
         host: localhost
         state: present
         update_password: on_create
@@ -67,14 +67,14 @@
       replace: 
         path: /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
         regexp: '^\s\s\s\susername:.*'
-        replace: '    username: anil'
+        replace: '    username: {{ db_user }}'
         backup: yes
 
     - name: change the password
       replace: 
         path: /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
         regexp: '^\s\s\s\spassword:.*'
-        replace: '    password: abcd'
+        replace: '    password: {{ db_pass }}'
         backup: yes
 
     - name: clean mvn install dependencies
@@ -95,11 +95,11 @@
     - name: Display the output of test
       debug: msg="{{ testresult.stdout_lines[-15:] }}"
       
-    - name: delete user anil
+    - name: delete the new user created
       become: yes
       mysql_user:
-        name: "anil"
-        password: "abcd"
+        name: "{{ db_user }}"
+        password: "{{ db_pass }}"
         host: localhost
         state: absent
         login_unix_socket: /var/run/mysqld/mysqld.sock
