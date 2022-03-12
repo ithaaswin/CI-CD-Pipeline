@@ -26,17 +26,27 @@ $ vm pull                                             # To install Ubuntu:Jammy 
 $ brew install ansible                                # To Install Ansible
 $ ansible-galaxy collection install community.mysql   # To install mysql module for playbook
 ```
+```Windows/MAC Intel requirements```
+```text
+Windows/Intel Requirements
+Choco
+Virtual box
+Nodejs
+Bakerx
+Npm
 
-```.env```
+```
+
+```.env file```
 ```bash
 # Add the following env variables for any OS
-vm_name = Name_Of_VM
+vm_name = Name_Of_VM                # Ex: vm-server
 git_user = Name_Of_GitUser          # Ex: wolf@ncsu.edu
 git_token = Git_Token               # Ex: 123adsfh32jjhg
 
 # Add the following for Windows and MAC Intel
 ip_address = 192.168.52.100         # Any ip can be assigned
-config_vm_name = Config_VM_Name
+config_vm_name = Config_VM_Name     # Ex:config-server
 ip_address_config = Config_VM_IP    # Ex: 192.168.64.121
 key_name = vm-server                # To create public and private key
 memory = 2048                       # RAM to be assigned for vm --Recommended to use atleast 2GB
@@ -50,13 +60,15 @@ For Windows and Mac Intel, we create a config server and use it to connect and m
 ```bash
 pipeline init
 ```
-is used to provision and configure a build server.
-The init script calls provision.js and a build server is configured.
+When pipeline init is executed, the script will detect the processor (M1, Intel) and call the respective function to create the virtual machine(provision.js)</br>
+The script will store the connection information of virtual machine is stored in config.json and will config inventory file, which will change for every init step by varying values </br>
+For windows, the script will install ansible in the config server and it will generate and copies the key pair to respective paths inside the virtual machines.</br>
 
-For MAC M1, nameserver is added to the /etc/resolv.conf so that a connection with ports.ubuntu.com can be established.
+
+For MAC M1, nameserver is added to the /etc/resolv.conf so that a connection with ports.ubuntu.com can be established.</br>
 
 ```bash
-pipeline build itrust-build lib/build.yml
+pipeline build itrust-build build.yml
 ```
 [click here](/commands/init.js) to check init.js
 
@@ -71,6 +83,8 @@ The build.yml file has all the setup and job specifications required to be run i
 [Click here](/lib/build.yml) to check build.yml
 
 <a name = "buildenv_tag"></a>
+For windows: The build script executes and ssh into config server and executes the ansible playbook to install & clone the itrust and other dependencies inside the vm-server(destination).</br>
+It will fetch credentials for git and sql from .env file and executes the ansible playbook, which installs dependencies and runs maven test and cleans the build environment so that no issues occur for next builds.</br>
 
 ## Automatically configure a build environment for given build job specification
 
@@ -91,7 +105,16 @@ The above command calls build.js which calls builder.js and execute the jobs def
 
 Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/projects/1).
 
-The CHECKPOINT-M1.md file submitted for this milestone is available [here](/CHECKPOINT-M1.md).
+Issues faced before checkpoint are [here](/CHECKPOINT-M1.md). submitted on
+##### For Windows(Intel/Amd) processor
+*   Storing information from vm to json file was easy, but to run ansible-playbook, we have to use different ip than local loop id and also, we need to use the private public key pair generated for connecting two vms.  We have to fetch the Ip address from env file and also path of the new public key required for inventory.</br>
+*   Generating inventory file from config.Json initially resulted in unable to parse  the inventory error. We used logger.write to write the inventory file</br>
+*   Memory issue while we are running, pipeline build itrust-build build.yml with vm memory as 2048, we are facing time out issue, so we configured env variable to 4096 and executing the script.</br>
+*   Dpkg error->Sometimes we are facing dpkg lock error and ansible couldn’t complete the process, we edited the script to kill the existing dpkg process </br>
+*   We faced difficulties to replace the username and password in application.yml file. we used regex to find the pattern and replace it with new username and password.
+*   Mysql access denied -> We faced Access denied while creating new user and editing password due to not found credentials in.my.cnf file so we copied the file to root path as it was not recognisible.
+*   Mysql Error -> when we try to run the build multiple times, we faced access denied for user root, so cleaned the build environment at the end of script by creating anew user and deleting the user at the end of the script.
+
 ##### For MAC M1
 *   Installing Ansible on MAC M1 was simple but Ansible was throwing different errors than when using json file and to parse and running commands on build server.
 *   Initially Ansible was running build.yml smoothly. Then [package not found error](/Pictures/Errors/Package%20Matching%20-%202.png) started appearing. The error was not self explanatory as the error was sporadic and root cause was not found.
