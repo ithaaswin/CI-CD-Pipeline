@@ -126,10 +126,10 @@ Issues faced before checkpoint are [here](/CHECKPOINT-M1.md). submitted on [date
 *   Generating inventory file from config.Json initially resulted in unable to parse  the inventory error. We used logger.write to write the inventory file</br>
 *   Memory issue ->while we are running, pipeline build itrust-build build.yml with vm memory as 2048, we are facing time out issue while installing maven dependencies, so we configured env variable to 4096 and executing the script.
 *   The error can be seen below if less memory is assigned in .env file
-*   ```
-*   Failed to connect to MBean server at port 9001: Could not invoke shutdown operation: Spring application did not start before the configured timeout (30000ms -> [Help 1]
-*   ```
-*   </br>
+```
+Failed to connect to MBean server at port 9001: Could not invoke shutdown operation: Spring application did not start before the configured timeout (30000ms -> [Help 1]
+```
+</br>
 *   Dpkg error->Sometimes we are facing dpkg lock error and ansible couldn’t complete the process, we edited the script to kill the existing dpkg process </br>
 *   We faced difficulties to replace the username and password in application.yml file. we used regex to find the pattern and replace it with new username and password.
 *   Mysql access denied -> We faced Access denied while creating new user and editing password due to not found credentials in.my.cnf file so we copied the file to root path as it was not recognisible.
