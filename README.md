@@ -28,7 +28,6 @@ $ ansible-galaxy collection install community.mysql   # To install mysql module 
 ```
 ```Windows/MAC Intel requirements```
 ```text
-Windows/Intel Requirements
 Choco
 Virtual box
 Nodejs
