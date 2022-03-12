@@ -106,15 +106,6 @@ The above command calls build.js which calls builder.js and execute the jobs def
 Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/projects/1).
 
 Issues faced before checkpoint are [here](/CHECKPOINT-M1.md). submitted on [date]
-##### For Windows(Intel/Amd) processor
-*   Storing information from vm to json file was easy, but to run ansible-playbook, we have to use different ip than local loop id and also, we need to use the private public key pair generated for connecting two vms.  We have to fetch the Ip address from env file and also path of the new public key  of the destination vm required for inventory.</br>
-*   We tried to install ansible for windows in multiple ways, but not found a single useful way, as it messes up with the hyper visor and results in Vbox vm error. We came up with the solution to create a new config server and scripted the code to act this config server as a new local host, which will execute the ansible playbook inside the desination or final vm. To do this we followed CM workshop as a reference.
-*   Generating inventory file from config.Json initially resulted in unable to parse  the inventory error. We used logger.write to write the inventory file</br>
-*   Memory issue ->while we are running, pipeline build itrust-build build.yml with vm memory as 2048, we are facing time out issue while installing maven dependencies, so we configured env variable to 4096 and executing the script.</br>
-*   Dpkg error->Sometimes we are facing dpkg lock error and ansible couldn’t complete the process, we edited the script to kill the existing dpkg process </br>
-*   We faced difficulties to replace the username and password in application.yml file. we used regex to find the pattern and replace it with new username and password.
-*   Mysql access denied -> We faced Access denied while creating new user and editing password due to not found credentials in.my.cnf file so we copied the file to root path as it was not recognisible.
-*   Mysql Error -> when we try to run the build multiple times, we faced access denied for user root, so we clean the build environment at the end of script by creating a new user and deleting the user at the end of the script.
 
 ##### For MAC M1
 *   Installing Ansible on MAC M1 was simple but Ansible was throwing different errors than when using json file and to parse and running commands on build server.
@@ -126,6 +117,17 @@ Issues faced before checkpoint are [here](/CHECKPOINT-M1.md). submitted on [date
 *   Used Ansible playbook to finish this process. This is exclusive to MAC M1.
 *   Sometimes faced dpkg locked error even before the first process is executed. So, automated the process of removing lock whenever build.yml is called.
 *   Made sure that each time a init is ran, a new vm instance is created. If an old vm with same name is available, it is removed without any user interruption.
+
+##### For Windows(Intel/Amd) processor
+*   Storing information from vm to json file was easy, but to run ansible-playbook, we have to use different ip than local loop id and also, we need to use the private public key pair generated for connecting two vms.  We have to fetch the Ip address from env file and also path of the new public key  of the destination vm required for inventory.</br>
+*   We tried to install ansible for windows in multiple ways, but not found a single useful way, as it messes up with the hyper visor and results in Vbox vm error. We came up with the solution to create a new config server and scripted the code to act this config server as a new local host, which will execute the ansible playbook inside the desination or final vm. To do this we followed CM workshop as a reference.
+*   Generating inventory file from config.Json initially resulted in unable to parse  the inventory error. We used logger.write to write the inventory file</br>
+*   Memory issue ->while we are running, pipeline build itrust-build build.yml with vm memory as 2048, we are facing time out issue while installing maven dependencies, so we configured env variable to 4096 and executing the script.</br>
+*   Dpkg error->Sometimes we are facing dpkg lock error and ansible couldn’t complete the process, we edited the script to kill the existing dpkg process </br>
+*   We faced difficulties to replace the username and password in application.yml file. we used regex to find the pattern and replace it with new username and password.
+*   Mysql access denied -> We faced Access denied while creating new user and editing password due to not found credentials in.my.cnf file so we copied the file to root path as it was not recognisible.
+*   Mysql Error -> when we try to run the build multiple times, we faced access denied for user root, so we clean the build environment at the end of script by creating a new user and deleting the user at the end of the script.
+
 
 <a name = "screencast_tag"></a>
 ## Screencast 
