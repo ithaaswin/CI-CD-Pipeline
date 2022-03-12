@@ -53,7 +53,7 @@ ip_address = 192.168.52.100         # Any ip can be assigned
 config_vm_name = Config_VM_Name     # Ex:config-server
 ip_address_config = Config_VM_IP    # Ex: 192.168.64.121
 key_name = vm-server                # To create public and private key
-memory = 2048                       # RAM to be assigned for vm --Recommended to use atleast 2GB
+memory = 4096                       # RAM to be assigned for vm --Recommended to use atleast 4GB
 # Please make sure no comment lines are in .env file
 ```
 
@@ -109,7 +109,7 @@ The above command calls build.js which calls builder.js and execute the jobs def
 
 Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/projects/1).
 
-Issues faced before checkpoint are [here](/CHECKPOINT-M1.md). submitted on [date]
+Issues faced before checkpoint are [here](/CHECKPOINT-M1.md). submitted on [3/2/2022](./Pictures/checkpoint.png)
 
 ##### For MAC M1
 *   Installing Ansible on MAC M1 was simple but Ansible was throwing different errors than when using json file and to parse and running commands on build server.
