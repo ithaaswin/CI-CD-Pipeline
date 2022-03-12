@@ -133,4 +133,4 @@ Issues faced before checkpoint are [here](/CHECKPOINT-M1.md). submitted on [date
 
 [Click Here](https://drive.google.com/file/d/1JvOL7ctN6t-aCD31sB6T61-AghoSXpWi/view?usp=sharing) for Screencast of Windows
 <br>
-Link to Screencast for Windows - https://drive.google.com/file/d/1JvOL7ctN6t-aCD31sB6T61-AghoSXpWi/view?usp=sharing
+Link to Screencast for Windows (If above hyperlink is not working) - https://drive.google.com/file/d/1JvOL7ctN6t-aCD31sB6T61-AghoSXpWi/view?usp=sharing
