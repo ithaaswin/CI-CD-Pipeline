@@ -129,7 +129,9 @@ Issues faced before checkpoint are [here](/CHECKPOINT-M1.md). submitted on [date
 
 <a name = "screencast_tag"></a>
 ## Screencast 
-[Click Here]() for Screencast of MAC M1
+[Click Here](https://youtu.be/7n9DFXqBcAM) for Screencast of MAC M1
+
+Use this if the above is not working - https://youtu.be/7n9DFXqBcAM
 
 [Click Here](https://drive.google.com/file/d/1JvOL7ctN6t-aCD31sB6T61-AghoSXpWi/view?usp=sharing) for Screencast of Windows
 <br>
