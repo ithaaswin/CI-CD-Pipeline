@@ -6,6 +6,7 @@
 | [Automatically configure a build environment for given build job specification (30%)](#buildenv_tag) | [Click Here](/lib/builder.js) |
 | [Checkpoint and Milestone report (20%)](#milestone_tag) | [Click Here](#milestone_tag) |
 | [Screencast (10%)](#screencast_tag) | [Click Here](#screencast_tag)|
+| [env file](#env_file)
 
 
 <a name = "provision_tag"></a>
@@ -36,6 +37,7 @@ Npm
 use bakerx to pull ubuntu focal image
 
 ```
+<a name = "env_file"></a>
 
 ```.env file```
 ```bash
