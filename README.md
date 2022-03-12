@@ -108,6 +108,7 @@ Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS
 Issues faced before checkpoint are [here](/CHECKPOINT-M1.md). submitted on
 ##### For Windows(Intel/Amd) processor
 *   Storing information from vm to json file was easy, but to run ansible-playbook, we have to use different ip than local loop id and also, we need to use the private public key pair generated for connecting two vms.  We have to fetch the Ip address from env file and also path of the new public key required for inventory.</br>
+*   We tried to install ansible for windows in multiple ways, but not found a single useful way, as it messes up with the hyper visor and results in Vbox vm error. We came up with the solution to create a new config server and scripted the code to act this config server as a new local host, which will execute the ansible playbook inside the desination or final vm. To do this we followed CM workshop as a reference.
 *   Generating inventory file from config.Json initially resulted in unable to parse  the inventory error. We used logger.write to write the inventory file</br>
 *   Memory issue while we are running, pipeline build itrust-build build.yml with vm memory as 2048, we are facing time out issue, so we configured env variable to 4096 and executing the script.</br>
 *   Dpkg error->Sometimes we are facing dpkg lock error and ansible couldn’t complete the process, we edited the script to kill the existing dpkg process </br>
