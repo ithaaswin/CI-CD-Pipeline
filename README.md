@@ -43,6 +43,8 @@ use bakerx to pull ubuntu focal image
 vm_name = Name_Of_VM                # Ex: vm-server
 git_user = Name_Of_GitUser          # Ex: wolf@ncsu.edu
 git_token = Git_Token               # Ex: 123adsfh32jjhg
+db_user = hari                      # set the username of mysql
+db_pass = 12345                     # set the password of mysql 
 
 # Add the following for Windows and MAC Intel
 ip_address = 192.168.52.100         # Any ip can be assigned
@@ -50,8 +52,6 @@ config_vm_name = Config_VM_Name     # Ex:config-server
 ip_address_config = Config_VM_IP    # Ex: 192.168.64.121
 key_name = vm-server                # To create public and private key
 memory = 2048                       # RAM to be assigned for vm --Recommended to use atleast 2GB
-db_user = hari                      # set the username of mysql
-db_pass = 12345                     # set the password of mysql 
 # Please make sure no comment lines are in .env file
 ```
 
