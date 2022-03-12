@@ -89,7 +89,7 @@ It will fetch credentials for git and sql from .env file and executes the ansibl
 ## Automatically configure a build environment for given build job specification
 
 ```bash
-pipeline build itrust-build lib/build.yml
+pipeline build itrust-build build.yml
 ```
 
 The above command calls build.js which calls builder.js and execute the jobs defined in build.yml targeting build server.
