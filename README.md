@@ -4,7 +4,7 @@
 | [Automatically provision and configure a build server (20%)](#provision_tag) | [Click Here](/lib/provision.js) |
 | [Create a build job specification (20%)](#buildjob_tag) | [Click Here](/lib/build.yml) |
 | [Automatically configure a build environment for given build job specification (30%)](#buildenv_tag) | [Click Here](/lib/builder.js) |
-| [Checkpoint and Milestone report (20%)](#milestone_tag) | [Click Here](/README.md) |
+| [Checkpoint and Milestone report (20%)](#milestone_tag) | [Click Here](#milestone_tag) |
 | [Screencast (10%)](#screencast_tag) | [Click Here](#screencast_tag)|
 
 
