@@ -33,6 +33,7 @@ Virtual box
 Nodejs
 Bakerx
 Npm
+use bakerx to pull ubuntu focal image
 
 ```
 
