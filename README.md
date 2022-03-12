@@ -50,6 +50,8 @@ config_vm_name = Config_VM_Name     # Ex:config-server
 ip_address_config = Config_VM_IP    # Ex: 192.168.64.121
 key_name = vm-server                # To create public and private key
 memory = 2048                       # RAM to be assigned for vm --Recommended to use atleast 2GB
+db_user = hari                      # set the username of mysql
+db_pass = 12345                     # set the password of mysql 
 # Please make sure no comment lines are in .env file
 ```
 
