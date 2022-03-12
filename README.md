@@ -114,7 +114,7 @@ Issues faced before checkpoint are [here](/CHECKPOINT-M1.md). submitted on [date
 *   Dpkg error->Sometimes we are facing dpkg lock error and ansible couldn’t complete the process, we edited the script to kill the existing dpkg process </br>
 *   We faced difficulties to replace the username and password in application.yml file. we used regex to find the pattern and replace it with new username and password.
 *   Mysql access denied -> We faced Access denied while creating new user and editing password due to not found credentials in.my.cnf file so we copied the file to root path as it was not recognisible.
-*   Mysql Error -> when we try to run the build multiple times, we faced access denied for user root, so cleaned the build environment at the end of script by creating anew user and deleting the user at the end of the script.
+*   Mysql Error -> when we try to run the build multiple times, we faced access denied for user root, so we clean the build environment at the end of script by creating a new user and deleting the user at the end of the script.
 
 ##### For MAC M1
 *   Installing Ansible on MAC M1 was simple but Ansible was throwing different errors than when using json file and to parse and running commands on build server.
