@@ -1,79 +1,106 @@
 #!/bin/bash
 
-# cp "$1" "mutate.sh"
-
 git clone --recursive https://github.com/chrisparnin/checkbox.io-micro-preview.git
-# git clone --recursive https://github.com/CSC-DevOps/ASTRewrite.git
-git clone --recursive https://github.com/ruttabega/screenshot.git
+git clone --recursive https://github.com/ruttabega/node screenshot.js.git
 
 sudo apt-get update
 sudo apt-get install -y jq npm imagemagick chromium-browser
 
-npm install escodegen
+npm install puppeteer escodegen
 
-cd checkbox.io-micro-preview
+cd ~/checkbox.io-micro-preview
 npm i
-
-cd ~/ASTRewrite
-npm i
-cd~
-
-# Change rewrite and add ~
-
-cd ~/screenshot
-npm i && sudo npm link
+# awk '{sub("./marqdown","./marqdown-mod")}1' index.js > temp.js
+# mv temp.js index.js
 
 sudo mkdir -m 777 -p ~/images/original
 sudo mkdir -m 777 -p ~/images/mutated
 
-cd checkbox.io-micro-preview
+cd ~/checkbox.io-micro-preview
 node index.js > /dev/null 2>&1 &
 
-cd ~/screenshot
-screenshot  http://localhost:3000/survey/upload.md ~/images/original/upload
-screenshot  http://localhost:3000/survey/long.md ~/images/original/long
-screenshot  http://localhost:3000/survey/survey.md ~/images/original/survey
-screenshot  http://localhost:3000/survey/variations.md ~/images/original/variations
-
+cd ~
+node screenshot.js  http://localhost:3000/survey/upload.md ~/images/original/upload
+node screenshot.js  http://localhost:3000/survey/long.md ~/images/original/long
+node screenshot.js  http://localhost:3000/survey/survey.md ~/images/original/survey
+node screenshot.js  http://localhost:3000/survey/variations.md ~/images/original/variations
 kill -9 $! > /dev/null
+wait 2>>log.txt
+wait 2>>log.txt
 
 
-rm -rf result.json temp1.json temp2.json
+rm -rf result.json temp1.json temp2.json log.txt
 touch result.json temp1.json temp2.json
+exceptionCounter=0
+exceptionFlag=false
+changeCounter=0
 
-for i in {1..1000}
+for i in {1..1}
 do
-        ranNum=$(( 1+$RANDOM % $1 ))
-        operator=$( jq -r --arg num "$ranNum" '.[$num]' operations.json )
+        sudo rm -rf consoleLog.txt
+        # ranNum=$(( 1+$RANDOM % $1 ))
+        # operator=$( jq -r --arg num "$ranNum" '.[$num]' operations.json )
+        node rewrite.js >> consoleLog.txt
+        operator=$( cat consoleLog.txt | head -n 1 )
+        sourceLine=$( cat consoleLog.txt | tail -n 1 )
 
-        sourceLine=$( node rewrite.js "$operator" )
-        
-        cd ~/checkbox.io-micro-preview
+        {
+                cd checkbox.io-micro-preview
+                node index.js > /dev/null 2>&1 &
+                sudo mkdir -m 777 -p ~/images/mutated/$i
 
-        node index.js > /dev/null 2>&1 &
-        sudo mkdir -m 777 -p ~/images/mutated/$i
-        cd ~/screenshot
-        screenshot  http://localhost:3000/survey/upload.md ~/images/mutated/$i/upload
-        screenshot  http://localhost:3000/survey/long.md ~/images/mutated/$i/long
-        screenshot  http://localhost:3000/survey/survey.md ~/images/mutated/$i/survey
-        screenshot  http://localhost:3000/survey/variations.md ~/images/mutated/$i/variations
+                cd ~
+                { 
+                        node screenshot.js  http://localhost:3000/survey/upload.md ~/images/mutated/$i/upload
+                } || { 
+                        exceptionFlag=true
+                }
+                {
+                        node screenshot.js  http://localhost:3000/survey/long.md ~/images/mutated/$i/long
+                } || {
+                        exceptionFlag=true
+                }
+                {
+                        node screenshot.js  http://localhost:3000/survey/survey.md ~/images/mutated/$i/survey
+                } || {
+                        exceptionFlag=true
+                }
+                {
+                        node screenshot.js  http://localhost:3000/survey/variations.md ~/images/mutated/$i/variations
+                } || {
+                        exceptionFlag=true
+                }
+                
+                if [ $exceptionFlag = false ]
+                then
+                kill -9 $! 
+                wait 2>>log.txt
+                wait 2>>log.txt
+                cd ~
+                compare -metric AE -fuzz 5% ~/images/original/upload.png ~/images/mutated/$i/upload.png null: 2>pixelDiff1
+                compare -metric AE -fuzz 5% ~/images/original/long.png ~/images/mutated/$i/long.png null: 2>pixelDiff2
+                compare -metric AE -fuzz 5% ~/images/original/survey.png ~/images/mutated/$i/survey.png null: 2>pixelDiff3
+                compare -metric AE -fuzz 5% ~/images/original/variations.png ~/images/mutated/$i/variations.png null: 2>pixelDiff4
 
-        kill -9 $! 
-        wait 2>/dev/null
-        cd ~
+                pixelDiff=$(( $(head -n 1 pixelDiff1)+$(head -n 1 pixelDiff2)+$(head -n 1 pixelDiff3)+$(head -n 1 pixelDiff4) ))
 
-        compare -metric AE -fuzz 5% ~/images/original/upload.png ~/images/mutated/$i/upload.png null: 2>pixelDiff1
-        compare -metric AE -fuzz 5% ~/images/original/long.png ~/images/mutated/$i/long.png null: 2>pixelDiff2
-        compare -metric AE -fuzz 5% ~/images/original/survey.png ~/images/mutated/$i/survey.png null: 2>pixelDiff3
-        compare -metric AE -fuzz 5% ~/images/original/variations.png ~/images/mutated/$i/variations.png null: 2>pixelDiff4
+                        if [ $pixelDiff -eq 0 ]
+                        then
+                        endResult='Not Changed'
+                        else
+                        endResult='Changed'
+                        changeCounter=$(($changeCounter+1))
+                        fi
+                fi
+        } || {
+                exceptionFlag=true
+        }
 
-        pixelDiff=$(( $(head -n 1 pixelDiff1)+$(head -n 1 pixelDiff2)+$(head -n 1 pixelDiff3)+$(head -n 1 pixelDiff4) ))
-
-        if [ $pixelDiff -eq 0 ]
+        if $exceptionFlag
         then
-        endResult='Not Changed'
-        else
-        endResult='Changed'
+        endResult='Exception'
+        exceptionCounter=$(($exceptionCounter+1))
+        exceptionFlag=false
         fi
 
         json_data=$(cat <<EOF 
@@ -82,28 +109,14 @@ EOF
 )
 echo $json_data > temp1.json
 cat result.json > temp2.json
-jq -s add temp1.json temp2.json > result.json
+jq -R -s add temp1.json temp2.json > result.json
 echo "Mutation-$i Completed"
 done
 
-# for i in {1..1000}
-# do
-#         operator=$(( 1+$RANDOM % $1 ))
-#         sourceLine=$(( 1+$RANDOM % $1 ))
-#         endResult=$(( 1+$RANDOM % $1 ))
-# json_data=$(cat <<EOF 
-# {$i:{"operator": "$operator","sourceLine": "$sourceLine","result": "$endResult"}}
-# EOF
-# )
+passedCounter=$((1000-$changeCounter-$exceptionCounter))
+denom=$(( 1000-$exceptionCounter ))
 
-# echo $json_data
-# done
-
-# jq json_data ~/result.json
-# done
-
-# JSON_STRING=$( jq -n \ --arg bn "$BUCKET_NAME" \ --arg on "$OBJECT_NAME" \ --arg tl "$TARGET_LOCATION" \
-# '{result: {bucketname: $bn, objectname: $on, targetlocation: $tl}}' )
-
-# #json_data=$( jq -n --arg loo "$i" --arg bn "$operator" --arg on "$sourceLine" --arg tl "$endResult" \
-# #'{$looper:{operator: $bn, sourceLine: $on, endResult: $tl}}')
+echo "Failed Mutants: $changeCounter"
+echo "Passed Mutants: $passedCounter"
+echo "Exception Mutants: $exceptionCounter"
+echo "Mutation Coverage: $passedCounter/$denom"
