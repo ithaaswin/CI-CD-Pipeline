@@ -1,123 +1,46 @@
----
-- hosts: all
-  gather_facts: no
-  become: yes
+setup: 
+  - sudo apt update -y
+  - sudo apt install git wget -y
+  - rm -rf iTrust2-v10
+  - rm -rf checkbox.io-micro-preview
+  - sudo apt install -qq -y debconf-utils
+  - export DEBIAN_FRONTEND="noninteractive"
+  - echo \"mysql-server mysql-server/root_password password {{mysql_pass}}\" | sudo debconf-set-selections
+  - echo \"mysql-server mysql-server/root_password_again password {{mysql_pass}}\" | sudo debconf-set-selections
+ 
+Variable:
+  - DEBIAN_FRONTEND="noninteractive"
 
-  vars: 
-    packages:
-      - git
-      - nodejs
-      - mysql-server
-      - maven
-      - wget
-      - openjdk-11-jdk
-      - python3-pymysql
-      
-  tags: itrust-build
-  tasks:
-
-    - name: Kill Existing dpkg process
-      become: yes
-      file:
-        state: absent
-        path: "/var/lib/dpkg/lock"
-    
-    - name: Install required packages for iTrust
-      apt: pkg={{item}} state=present update_cache=yes
-      become: yes
-      with_items: "{{packages}}"
-    
-    - name: Clone itrust
-      git:
-        repo: https://{{ git_user|urlencode() }}:{{ git_token|urlencode() }}@github.ncsu.edu/engr-csc326-staff/iTrust2-v10.git
-        clone: yes
-        update: yes
-        dest: "/home/ubuntu/iTrust"
-    
-    - name: Get mysql up and running
-      service:
-        name: mysql
-        state: started
-        enabled: True
-
-    - name: copy .my.cnf file with mysql root password credentials
-      template: src=my.cnf.j2 dest="/root/.my.cnf owner=root mode=0777"
-
-    - name: Flush Privileges
-      shell: "mysql -u root -e 'FLUSH PRIVILEGES'"
-
-    - name: Create new user
-      become: yes
-      mysql_user:
-        name: "{{ db_user }}"
-        password: "{{ db_pass }}"
-        host: localhost
-        state: present
-        update_password: on_create
-        priv: "*.*:ALL,GRANT"
-        login_unix_socket: /var/run/mysqld/mysqld.sock
-
-    - name: Change the Template of yml 
-      shell: cp /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml.template /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
-      
-    - name: Change the write mode of application.yml
-      shell: chmod 777 /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
-      
-    - name: change the username
-      replace: 
-        path: /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
-        regexp: '^\s\s\s\susername:.*'
-        replace: '    username: {{ db_user }}'
-        backup: yes
-
-    - name: change the password
-      replace: 
-        path: /home/ubuntu/iTrust/iTrust2/src/main/resources/application.yml
-        regexp: '^\s\s\s\spassword:.*'
-        replace: '    password: {{ db_pass }}'
-        backup: yes
-
-    - name: clean mvn install dependencies
-      command: "sudo mvn clean install"
-      register: installresult
-      args: 
-        chdir: /home/ubuntu/iTrust/iTrust2
-
-    - name: Display the output of mvn install
-      debug: msg="{{ installresult.stdout_lines[-8:] }}"
-
-    - name: test the application 
-      command: "sudo mvn --batch-mode --update-snapshots clean test"
-      register: testresult
-      args:
-        chdir: /home/ubuntu/iTrust/iTrust2
-        
-    - name: Display the output of test
-      debug: msg="{{ testresult.stdout_lines[-15:] }}"
-      
-    - name: delete the new user created
-      become: yes
-      mysql_user:
-        name: "{{ db_user }}"
-        password: "{{ db_pass }}"
-        host: localhost
-        state: absent
-        login_unix_socket: /var/run/mysqld/mysqld.sock
-
-- hosts: all
-  gather_facts: no
-  become: yes
-
-  tags: nameserver
-  tasks:
-    - name: Adding nameserver-1
-      lineinfile:
-        path: /etc/resolv.conf
-        insertbefore: BOF
-        line: 'nameserver 8.8.4.4'
-
-    - name: Adding nameserver-2
-      lineinfile:
-        path: /etc/resolv.conf
-        insertbefore: BOF
-        line: 'nameserver 8.8.8.8'
+jobs:
+  - name: itrust-build
+    steps: 
+      - name: install JRE
+        run: sudo apt install default-jre -y
+      - name: install JDK
+        run: sudo apt install openjdk-11-jdk -y
+      - name: install Maven
+        run: sudo apt install maven -y ; export PATH=/opt/apache-maven-3.8.4/bin:$PATH 
+      - name: install nodejs
+        run: sudo apt install nodejs -y
+      - name: install npm
+        run: sudo apt install npm -y   
+      - name: install mysql
+        run: sudo apt install -y mysql-server
+      - name: clone itrust
+        run: git clone https://{{git_token}}@github.ncsu.edu/engr-csc326-staff/iTrust2-v10.git           
+      - name: create application.yml file
+        run: cp iTrust2-v10/iTrust2/src/main/resources/application.yml.template iTrust2-v10/iTrust2/src/main/resources/application.yml
+      - name: set password in application.yml
+        run: sed -i 's/password\:/password\:\ {{mysql_pass}}/g' iTrust2-v10/iTrust2/src/main/resources/application.yml
+      - name: test iTrust1
+        run: mvn -f iTrust2-v10/iTrust2 --batch-mode --update-snapshots clean test
+  
+  - name: mutation-coverage
+    mutation:
+      url: https://github.com/chrisparnin/checkbox.io-micro-preview
+      iterations: 1000
+      snapshots:
+       - http://localhost:3000/survey/long.md
+       - http://localhost:3000/survey/upload.md
+       - http://localhost:3000/survey/survey.md
+       - http://localhost:3000/survey/variations.md             
