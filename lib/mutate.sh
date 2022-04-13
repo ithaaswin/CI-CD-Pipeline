@@ -1,7 +1,6 @@
 #!/bin/bash
 
 git clone --recursive https://github.com/chrisparnin/checkbox.io-micro-preview.git
-git clone --recursive https://github.com/ruttabega/node screenshot.js.git
 
 sudo apt-get update
 sudo apt-get install -y jq npm imagemagick chromium-browser
@@ -9,9 +8,6 @@ sudo apt-get install -y jq npm imagemagick chromium-browser
 npm install puppeteer escodegen
 
 cd ~/checkbox.io-micro-preview
-npm i
-# awk '{sub("./marqdown","./marqdown-mod")}1' index.js > temp.js
-# mv temp.js index.js
 
 sudo mkdir -m 777 -p ~/images/original
 sudo mkdir -m 777 -p ~/images/mutated
