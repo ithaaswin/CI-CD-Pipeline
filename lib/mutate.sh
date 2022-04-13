@@ -8,6 +8,7 @@ sudo apt-get install -y jq npm imagemagick chromium-browser
 npm install puppeteer escodegen
 
 cd ~/checkbox.io-micro-preview
+npm i
 
 sudo mkdir -m 777 -p ~/images/original
 sudo mkdir -m 777 -p ~/images/mutated
