@@ -1,7 +1,8 @@
 #!/bin/bash
 
-git clone --recursive https://github.com/chrisparnin/checkbox.io-micro-preview.git
+# git clone --recursive https://github.com/chrisparnin/checkbox.io-micro-preview.git
 
+cd ~
 sudo apt-get update
 sudo apt-get install -y jq npm imagemagick chromium-browser
 
@@ -12,19 +13,19 @@ npm i
 
 sudo mkdir -m 777 -p ~/images/original
 sudo mkdir -m 777 -p ~/images/mutated
+sudo mkdir -m 777 -p ~/images/difference
 
 cd ~/checkbox.io-micro-preview
 node index.js > /dev/null 2>&1 &
 
 cd ~
-node screenshot.js  http://localhost:3000/survey/upload.md ~/images/original/upload
-node screenshot.js  http://localhost:3000/survey/long.md ~/images/original/long
-node screenshot.js  http://localhost:3000/survey/survey.md ~/images/original/survey
-node screenshot.js  http://localhost:3000/survey/variations.md ~/images/original/variations
+node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/upload.md ~/images/original/upload
+node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/long.md ~/images/original/long
+node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/survey.md ~/images/original/survey
+node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/variations.md ~/images/original/variations
+
 kill -9 $! > /dev/null
 wait 2>>log.txt
-wait 2>>log.txt
-
 
 rm -rf result.json temp1.json temp2.json log.txt
 touch result.json temp1.json temp2.json
@@ -32,11 +33,9 @@ exceptionCounter=0
 exceptionFlag=false
 changeCounter=0
 
-for i in {1..1}
+for (( i=0; i<$1; i++ ))
 do
         sudo rm -rf consoleLog.txt
-        # ranNum=$(( 1+$RANDOM % $1 ))
-        # operator=$( jq -r --arg num "$ranNum" '.[$num]' operations.json )
         node rewrite.js >> consoleLog.txt
         operator=$( cat consoleLog.txt | head -n 1 )
         sourceLine=$( cat consoleLog.txt | tail -n 1 )
@@ -48,22 +47,22 @@ do
 
                 cd ~
                 { 
-                        node screenshot.js  http://localhost:3000/survey/upload.md ~/images/mutated/$i/upload
+                        node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/upload.md ~/images/mutated/$i/upload
                 } || { 
                         exceptionFlag=true
                 }
                 {
-                        node screenshot.js  http://localhost:3000/survey/long.md ~/images/mutated/$i/long
+                        node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/long.md ~/images/mutated/$i/long
                 } || {
                         exceptionFlag=true
                 }
                 {
-                        node screenshot.js  http://localhost:3000/survey/survey.md ~/images/mutated/$i/survey
+                        node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/survey.md ~/images/mutated/$i/survey
                 } || {
                         exceptionFlag=true
                 }
                 {
-                        node screenshot.js  http://localhost:3000/survey/variations.md ~/images/mutated/$i/variations
+                        node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/variations.md ~/images/mutated/$i/variations
                 } || {
                         exceptionFlag=true
                 }

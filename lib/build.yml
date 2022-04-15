@@ -1,12 +1,12 @@
 setup: 
-  - sudo apt update -y
-  - sudo apt install git wget -y
+  - sudo apt-get update -y
+  - sudo apt-get install git wget -y
   - sudo rm -rf iTrust2-v10
   - sudo rm -rf checkbox.io-micro-preview
   - sudo apt install -qq -y debconf-utils
   - export DEBIAN_FRONTEND="noninteractive"
-  - echo \"mysql-server mysql-server/root_password password {{mysql_pass}}\" | sudo debconf-set-selections
-  - echo \"mysql-server mysql-server/root_password_again password {{mysql_pass}}\" | sudo debconf-set-selections
+  - sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password {{mysql_pass}}'
+  - sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password {{mysql_pass}}'
  
 Variable:
   - DEBIAN_FRONTEND="noninteractive"
