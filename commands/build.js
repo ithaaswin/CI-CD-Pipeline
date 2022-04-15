@@ -10,10 +10,6 @@ exports.handler = async argv => {
     console.log('Job Name', job_name);
     console.log(build_path);
     console.log(processor);
-    if(processor == 'Arm64' ) {            
-        await builder.mac(job_name, build_path);
-    } 
-    else {
-        await builder.windows(job_name, build_path);   
-    }
+    await builder.build_job(processor, build_path, job_name);
+    
 };
