@@ -1,6 +1,8 @@
 #!/bin/bash
 
-# git clone --recursive https://github.com/chrisparnin/checkbox.io-micro-preview.git
+repoName=$(basename $1 .git)
+rm -rf $repoName
+git clone --recursive $1
 
 cd ~
 sudo apt-get update
@@ -8,21 +10,21 @@ sudo apt-get install -y jq npm imagemagick chromium-browser
 
 npm install puppeteer escodegen
 
-cd ~/checkbox.io-micro-preview
+cd ~/$repoName
 npm i
 
 sudo mkdir -m 777 -p ~/images/original
 sudo mkdir -m 777 -p ~/images/mutated
 sudo mkdir -m 777 -p ~/images/difference
 
-cd ~/checkbox.io-micro-preview
+cd ~/$repoName
 node index.js > /dev/null 2>&1 &
 
 cd ~
-node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/upload.md ~/images/original/upload
-node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/long.md ~/images/original/long
-node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/survey.md ~/images/original/survey
-node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/variations.md ~/images/original/variations
+node $2/mutation/screenshot.js  http://localhost:3000/survey/upload.md ~/images/original/upload
+node $2/mutation/screenshot.js  http://localhost:3000/survey/long.md ~/images/original/long
+node $2/mutation/screenshot.js  http://localhost:3000/survey/survey.md ~/images/original/survey
+node $2/mutation/screenshot.js  http://localhost:3000/survey/variations.md ~/images/original/variations
 
 kill -9 $! > /dev/null
 wait 2>>log.txt
@@ -33,36 +35,37 @@ exceptionCounter=0
 exceptionFlag=false
 changeCounter=0
 
-for (( i=0; i<$1; i++ ))
+for (( i=1; i<=$3; i++ ))
 do
         sudo rm -rf consoleLog.txt
-        node rewrite.js >> consoleLog.txt
+        node $2/mutation/rewrite.js >> consoleLog.txt
         operator=$( cat consoleLog.txt | head -n 1 )
         sourceLine=$( cat consoleLog.txt | tail -n 1 )
 
         {
-                cd checkbox.io-micro-preview
+                cd $repoName
                 node index.js > /dev/null 2>&1 &
                 sudo mkdir -m 777 -p ~/images/mutated/$i
+                sudo mkdir -m 777 -p ~/images/difference/$i
 
                 cd ~
                 { 
-                        node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/upload.md ~/images/mutated/$i/upload
+                        node $2/mutation/screenshot.js  http://localhost:3000/survey/upload.md ~/images/mutated/$i/upload
                 } || { 
                         exceptionFlag=true
                 }
                 {
-                        node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/long.md ~/images/mutated/$i/long
+                        node $2/mutation/screenshot.js  http://localhost:3000/survey/long.md ~/images/mutated/$i/long
                 } || {
                         exceptionFlag=true
                 }
                 {
-                        node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/survey.md ~/images/mutated/$i/survey
+                        node $2/mutation/screenshot.js  http://localhost:3000/survey/survey.md ~/images/mutated/$i/survey
                 } || {
                         exceptionFlag=true
                 }
                 {
-                        node ~/shared/cwd/lib/screenshot.js  http://localhost:3000/survey/variations.md ~/images/mutated/$i/variations
+                        node $2/mutation/screenshot.js  http://localhost:3000/survey/variations.md ~/images/mutated/$i/variations
                 } || {
                         exceptionFlag=true
                 }
@@ -73,10 +76,10 @@ do
                 wait 2>>log.txt
                 wait 2>>log.txt
                 cd ~
-                compare -metric AE -fuzz 5% ~/images/original/upload.png ~/images/mutated/$i/upload.png null: 2>pixelDiff1
-                compare -metric AE -fuzz 5% ~/images/original/long.png ~/images/mutated/$i/long.png null: 2>pixelDiff2
-                compare -metric AE -fuzz 5% ~/images/original/survey.png ~/images/mutated/$i/survey.png null: 2>pixelDiff3
-                compare -metric AE -fuzz 5% ~/images/original/variations.png ~/images/mutated/$i/variations.png null: 2>pixelDiff4
+                compare -metric AE -fuzz 5% ~/images/original/upload.png ~/images/mutated/$i/upload.png ~/images/difference/$i/upload.png  2>pixelDiff1
+                compare -metric AE -fuzz 5% ~/images/original/long.png ~/images/mutated/$i/long.png ~/images/difference/$i/long.png 2>pixelDiff2
+                compare -metric AE -fuzz 5% ~/images/original/survey.png ~/images/mutated/$i/survey.png ~/images/difference/$i/survey.png 2>pixelDiff3
+                compare -metric AE -fuzz 5% ~/images/original/variations.png ~/images/mutated/$i/variations.png ~/images/difference/$i/variations.png 2>pixelDiff4
 
                 pixelDiff=$(( $(head -n 1 pixelDiff1)+$(head -n 1 pixelDiff2)+$(head -n 1 pixelDiff3)+$(head -n 1 pixelDiff4) ))
 
@@ -103,14 +106,18 @@ do
 {"$i":{"operator": "$operator","sourceLine": "$sourceLine","result": "$endResult"}}
 EOF
 )
+
 echo $json_data > temp1.json
 cat result.json > temp2.json
-jq -R -s add temp1.json temp2.json > result.json
+jq -s add temp1.json temp2.json > result.json
 echo "Mutation-$i Completed"
 done
 
-passedCounter=$((1000-$changeCounter-$exceptionCounter))
-denom=$(( 1000-$exceptionCounter ))
+echo "$changeCounter"
+echo "$exceptionCounter"
+
+passedCounter=$(($3-$changeCounter-$exceptionCounter))
+denom=$(( $3-$exceptionCounter ))
 
 echo "Failed Mutants: $changeCounter"
 echo "Passed Mutants: $passedCounter"
