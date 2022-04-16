@@ -1,6 +1,5 @@
 node_modules/
 .env
 config.json
-vm-server
-vm-server.pub
-inventory
+mutation/Images
+mutation/result.json
