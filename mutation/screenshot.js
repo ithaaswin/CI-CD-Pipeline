@@ -8,7 +8,8 @@ const [, , ...args] = process.argv;
   const url = args[0];
   const filename = `${args[1]}.png`;
   const browser = await puppeteer.launch({
-    args: ['--no-sandbox']
+    args: ['--no-sandbox'],
+    executablePath: '/usr/bin/chromium-browser'
   });
   const page = await browser.newPage();
   try{
