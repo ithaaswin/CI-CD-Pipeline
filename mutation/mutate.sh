@@ -24,6 +24,17 @@ cd ~/$repoName
 npm i
 node index.js > /dev/null 2>&1 &
 process=$!
+readarray -t my_array < <(jq . /bakerx/snapshot.JSON)
+for i in "${my_array[@]}"
+do
+        echo $i
+
+done
+echo "next"
+for ((i=0; i<${#my_array[@]}; i++));
+do
+ echo ${my_array[$i]}
+done
 
 cd ~/mutation
 node screenshot.js  http://localhost:3000/survey/upload.md ~/mutation/Images/original/upload
