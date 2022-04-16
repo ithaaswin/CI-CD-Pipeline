@@ -267,8 +267,8 @@ function ExpressionMutations(ast,operation,oldOpr,newOpr) {
 
 
 
-rewrite("/home/ubuntu/checkbox.io-micro-preview/marqdown.js", 
-"/home/ubuntu/checkbox.io-micro-preview/marqdown.js")
+rewrite(`/home/${process.argv[2]}/${process.argv[3]}/${process.argv[4]}`, 
+`/home/${process.argv[2]}/${process.argv[3]}/${process.argv[4]}`)
 
 
 function getRandomInt(max) {

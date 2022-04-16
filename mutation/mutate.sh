@@ -3,6 +3,7 @@
 # $1 - URL for cloning repo
 # $2 - Path of shared folder between base Machine and VM
 # $3 - No of mutations to be run
+# $4 - User (Ubuntu/Vagrant)
 
 repoName=$(basename $1 .git)
 rm -rf $repoName
@@ -27,11 +28,25 @@ process=$!
 readarray -t my_array < <(jq . /bakerx/snapshot.JSON)
 
 cd ~/mutation
-for ((i=0; i<${#my_array[@]}; i++));
+
+# for ((i=0; i<${#my_array[@]}; i++));
+# do
+# ssname=$(basename ${my_array[$i]} .md)
+# node screenshot.js ${my_array[$i]}  ~/mutation/Images/original/$ssname
+# done
+
+cat snapshot.txt | while read line
 do
-ssname=$(basename ${my_array[$i]} .md)
-node screenshot.js ${my_array[$i]}  ~/mutation/Images/original/$ssname
+file_name="${line##*/}"
+fileName="${file_name%.*}"
+node screenshot.js  $line ~/mutation/Images/original/$fileName
 done
+
+# node screenshot.js  http://localhost:3000/survey/long.md ~/mutation/Images/original/long
+# node screenshot.js  http://localhost:3000/survey/survey.md ~/mutation/Images/original/survey
+# node screenshot.js  http://localhost:3000/survey/variations.md ~/mutation/Images/original/variations
+
+
 kill -9 $process > /dev/null
 wait $process 2>/dev/null
 
@@ -42,10 +57,21 @@ changeCounter=0
 for (( i=1; i<=$3; i++ ))
 do
         cd ~/mutation
+        mutateFile=$( node randomSelector.js ~/$repoName)
         sudo rm -rf rewriteLog.txt
-        node rewrite.js >> rewriteLog.txt
-        operator=$( cat rewriteLog.txt | head -n 1 )
+        node rewrite.js $4 $repoName $mutateFile>> rewriteLog.txt
+
+        operation=$( cat rewriteLog.txt | head -n 1 )
+        operator="${mutateFile}"
+        operator+=": "
+        operator+="${operation}"
+        lenSourceLine=$(wc -l < rewriteLog.txt )
+        if [[ lenSourceLine -eq 2 ]]
+        then
         sourceLine=$( cat rewriteLog.txt | tail -n 1 )
+        else
+        sourceLine="No Line Changed"
+        fi
 
         {
                 cd ~/$repoName
@@ -123,7 +149,7 @@ git reset --hard > /dev/null 2>&1 &
 echo "Mutation-$i Completed"
 done
 
-cp -r ~/mutation/Images $2/mutation/Images
+cp -r ~/mutation/Images $2/mutation/
 cp ~/mutation/result.json $2/mutation/result.json
 
 passedCounter=$(($3-$changeCounter-$exceptionCounter))
