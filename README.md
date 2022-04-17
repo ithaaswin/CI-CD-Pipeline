@@ -114,11 +114,9 @@ pipeline build mutation-coverage build.yml
 
 ## Checkpoint and Milestone Report
 
-### Challenges Faced:
-
 Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/projects/1).
 
-##### Errors and Challenges
+#### Errors and Challenges faced
 * Unable to launch chromium browser -> add executablePath: '/usr/bin/chromium-browser' in screenshot.js  </br>
 * To parse snapshots.json file. This was challenging as we were trying to clean data inside the bash script. Finally we sent the exact data by doing the data cleaning in js before saving data into snapshots.json
 * Dpkg error. Sometimes we were facing dpkg lock error and couldn’t complete the process. We handled this by killing the dpkg processes each time before a job is run this way preventing a run time error even when a process is force stopped and restarted.
@@ -128,7 +126,7 @@ Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS
 * Our first approach for M2 was to sshing each command of script into the vm. This gave rise to multiple issues as the state of vm is not guarenteed after the vm is closed. Fixed this my invoking the main script only inside the vm.
 * Pug error was one of the very common errors faced due to the mismatch of directories that was happening due to the reason stated above.
 * Admin previleges for many commands was asked and this was giving errors even to create a file. Fixed this by running bash script as a sudo.
-* The if else function was a very 
+* The if else function was a very tricky one. We had to understand the esprima parsing very precisely. Finally were able to achieve the exact function we expected.
 
 
 <a name = "screencast_tag"></a>
