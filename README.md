@@ -11,7 +11,6 @@
 | [ Challenges and Errors ](#milestone_tag) | [Click Here](#milestone_tag) |
 | [Screencast ](#screencast_tag) | [Click Here](#screencast_tag)
 
-Specify file structure what file contains what info
 ```MAC M1 requirements```
 ```text
 brew
@@ -97,8 +96,8 @@ if there is an exception, the exception log will be stored in the difference fol
 <a name = "mutatecoverage_tag"></a>
 
 ## mutation-coverage
-For every mutation, the results are stored into [result.json](/mutation/result.json).
-For simplicity we have uploaded the 1000 mutation images and the results and mutation-coverage are uploaded inside a new folder (/1000 Mutations/).
+For every mutation, the results are stored into [result.json](/mutation/result.json).</br>
+For simplicity we have uploaded the 1000 mutation images and the results and mutation-coverage are uploaded inside a new folder (/1000 Mutations/).</br>
 *  It stores the .js file which should be mutated and the mutation operator. Along with this, the result.JSON will also store the source line and the changes made and also it stores the result of the mutation on the snapshot. i.e., whether the snapshot has been changed, not changed or exception.
 The final mutation coverage details are stored in [mutation-coverage](/mutation/mutationCoverage.txt)
 
@@ -119,7 +118,7 @@ we faced challenges to set my sql password in application.yml--> we use sed comm
 *   Dpkg error->Sometimes we are facing dpkg lock error and  couldn’t complete the process, we edited the script(function call for dpkg) to kill the existing dpkg process </br>
 *   Mysql access denied -> we fixed this issue with the help of set deb conf utils in the set up part of build.yml
 *   Mysql Error -> when we try to run the itrust-build , we faced access denied for user root, so we clean the build environment at the end of script by creating a new user and deleting the user at the end of the script.
-
+* we faced connection error unable to contatc host --> we fixed this and added code to the implementation so that it never occurs
 
 <a name = "screencast_tag"></a>
 ## Screencast 
