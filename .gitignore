@@ -4,3 +4,4 @@ config.json
 snapshot.JSON
 mutation/Images
 mutation/result.json
+mutation/mutationCoverage.txt

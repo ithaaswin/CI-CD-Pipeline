@@ -1,35 +1,37 @@
 setup:
-  - sudo apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update > /dev/null
-  - sudo apt-get update -y > /dev/null
-  - sudo apt-get install git wget -y > /dev/null
-  - sudo apt install -qq -y debconf-utils > /dev/null
-  - export DEBIAN_FRONTEND="noninteractive"
+  - sudo apt-get -qqq -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update
+  - sudo apt-get -qqq update -y
+  - sudo apt-get -qqq install git wget -y
+  - sudo apt-get -qqq install -y debconf-utils
+  - export DEBIAN_FRONTEND=\"noninteractive\"
   - sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password {{mysql_pass}}'
   - sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password {{mysql_pass}}'
  
 Variable:
-  - DEBIAN_FRONTEND="noninteractive"
+  - DEBIAN_FRONTEND=\"noninteractive\"
 
 jobs:
   - name: itrust-build
     steps: 
       - name: install JRE
-        run: sudo apt install default-jre -y > /dev/null
+        run: sudo apt-get install default-jre -y
       - name: install JDK
-        run: sudo apt install openjdk-11-jdk -y > /dev/null
+        run: sudo apt-get -qqq install openjdk-11-jdk -y
       - name: install Maven
-        run: sudo apt install maven -y ; export PATH=/opt/apache-maven-3.8.4/bin:$PATH 
+        run: sudo apt-get -qqq install maven -y ; export PATH=/opt/apache-maven-3.8.4/bin:$PATH 
       - name: install nodejs
-        run: sudo apt install nodejs -y > /dev/null
+        run: sudo apt-get -qqq install nodejs -y
       - name: install npm
-        run: sudo apt install npm -y   
-      - name: install mysql > /dev/null
-        run: sudo apt install -y mysql-server
-      - name: clone itrust > /dev/null
-        run: git clone https://{{git_token}}@github.ncsu.edu/engr-csc326-staff/iTrust2-v10.git           
-      - name: create application.yml file > /dev/null
+        run: sudo apt-get -qqq install npm -y   
+      - name: install mysql
+        run: sudo apt-get -qqq install -y mysql-server
+      - name: Delete old itrust
+        run: sudo rm -rf iTrust2-v10
+      - name: clone iTrust
+        run: git clone --recursive https://{{git_token}}@github.ncsu.edu/engr-csc326-staff/iTrust2-v10.git           
+      - name: create application.yml file
         run: cp iTrust2-v10/iTrust2/src/main/resources/application.yml.template iTrust2-v10/iTrust2/src/main/resources/application.yml
-      - name: set password in application.yml > /dev/null
+      - name: set password in application.yml
         run: sed -i 's/password\:/password\:\ {{mysql_pass}}/g' iTrust2-v10/iTrust2/src/main/resources/application.yml
       - name: test iTrust1
         run: mvn -f iTrust2-v10/iTrust2 --batch-mode --update-snapshots clean test
@@ -37,9 +39,9 @@ jobs:
   - name: mutation-coverage
     mutation:
       url: https://github.com/chrisparnin/checkbox.io-micro-preview
-      iterations: 20
+      iterations: 50
       snapshots:
        - http://localhost:3000/survey/long.md
        - http://localhost:3000/survey/upload.md
        - http://localhost:3000/survey/survey.md
-       - http://localhost:3000/survey/variations.md             
+       - http://localhost:3000/survey/variations.md
