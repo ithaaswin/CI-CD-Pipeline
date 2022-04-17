@@ -2,6 +2,7 @@ node_modules/
 .env
 config.json
 snapshot.JSON
-# mutation/Images
-# mutation/result.json
-# mutation/mutationCoverage.txt
+mutation/Images
+mutation/result.json
+mutation/mutationCoverage.txt
+1000 Mutations/
