@@ -103,7 +103,7 @@ we use [screenshot.js](/mutation/screenshot.js) to capture the screenshot of a f
 * [mutation-coverage](/mutation/mutationCoverage.txt) has the final result of the mutations run.
 * The detailed result of the images failed, passed or an exception for each mutation is stored into [result.json](/mutation/result.json) with the key as mutation number.
 * The images generated for the job is found at Images[mutation/Images] which hold the original, mutated and the difference images for all the mutations.
-* The results of the 1000 mutations ran is stored at [1000 Mutations](1000 Mutations). 
+* The results of the 1000 mutations ran is stored at [1000 Mutations](/1000%20Mutations). 
 
 ```bash
 pipeline build mutation-coverage build.yml
