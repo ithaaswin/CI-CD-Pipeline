@@ -42,7 +42,8 @@ wait $process 2>/dev/null
 exceptionCounter=0
 exceptionFlag=false
 changeCounter=0
-
+echo ""
+echo "****************************************** Starting Mutations **************************************"
 for (( i=1; i<=$3; i++ ))
 do
 NoChangeFiles=""
@@ -77,8 +78,7 @@ sudo mkdir -m 777 -p ~/Images/difference/$i
 
 cd ~
 totSnaps=$(jq '.snaps | length' snapshots.json)
-echo ""
-echo "****************************************** Starting Mutations **************************************"
+
 for (( j=0; j<$totSnaps; j++))
 do
 cd ~
