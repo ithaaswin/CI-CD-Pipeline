@@ -2,5 +2,6 @@ node_modules/
 .env
 config.json
 snapshot.JSON
+snapshot.txt
 mutation/Images
 mutation/result.json
