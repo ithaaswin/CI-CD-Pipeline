@@ -44,6 +44,7 @@ changeCounter=0
 for (( i=1; i<=$3; i++ ))
 do
         cd ~
+        rm -rf 
         mutateFile=$( node randomSelector.js ~/$repoName)
         sudo rm -rf rewriteLog.txt
         node rewrite.js $4 $repoName $mutateFile >> rewriteLog.txt
@@ -123,7 +124,7 @@ jq -s add temp1.json temp2.json > result.json
 
 cd ~/$repoName
 git reset --hard > /dev/null 2>&1 &
-git clean -f -d > /dev/null 2>&1 &
+git clean -f -d
 
 echo "Mutation-$i Completed"
 done
