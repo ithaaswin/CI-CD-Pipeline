@@ -98,31 +98,24 @@ if there is an exception, the exception log will be stored in the difference fol
 
 ## mutation-coverage
 For every mutation, the results are stored into [result.json](/mutation/result.json).
-For simplicity we have uploaded the 1000 mutation images and the results and mutation-coverage are uploaded inside a new folder [1000 Mutations](/1000 Mutations/)
+For simplicity we have uploaded the 1000 mutation images and the results and mutation-coverage are uploaded inside a new folder (/1000 Mutations/).
 *  It stores the .js file which should be mutated and the mutation operator. Along with this, the result.JSON will also store the source line and the changes made and also it stores the result of the mutation on the snapshot. i.e., whether the snapshot has been changed, not changed or exception.
 The final mutation coverage details are stored in [mutation-coverage](/mutation/mutationCoverage.txt)
 
 ```bash
 pipeline build mutation-coverage build.yml
 ```
-
-
-
-
-
 <a name = "milestone_tag"></a>
 
 ## Challenges and Errors
 
 ### Challenges Faced:
 
-Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/projects/1).
-
+Our issues can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/issues).
+We faced challenges to parse the snapshot urls from build.yml in shell script, when we tried to dynamically import the urls from job names. We used jq module to get over from this challenge.parsing snapshot.json file </br>
+we faced challenges to set my sql password in application.yml--> we use sed command to set password
 ### Errors
-dpkg error</br>
-unable to launch chromium browser--> add executablePath: '/usr/bin/chromium-browser' in screenshot.js  </br>
-issues while setting mysql password </br>
-parsing snapshot.json file </br>
+*   unable to launch chromium browser--> we faced this issue only with windows, for mac it was working fine. To resolve this we have  added executablePath: '/usr/bin/chromium-browser' in screenshot.js for the chromium browser path </br>
 *   Dpkg error->Sometimes we are facing dpkg lock error and  couldn’t complete the process, we edited the script(function call for dpkg) to kill the existing dpkg process </br>
 *   Mysql access denied -> we fixed this issue with the help of set deb conf utils in the set up part of build.yml
 *   Mysql Error -> when we try to run the itrust-build , we faced access denied for user root, so we clean the build environment at the end of script by creating a new user and deleting the user at the end of the script.
