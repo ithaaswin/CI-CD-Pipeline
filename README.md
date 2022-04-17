@@ -75,7 +75,7 @@ we use [screenshot.js](/mutation/screenshot.js) to capture the screenshot of a f
 <a name = "mutate_tag"></a>
 
 ## Mutate Operators
-* The function [randomSelector.js](mutation/randomSelector.js) picks a file with .js extension randomly. Specific files which shouldn't be picked from the target directory can be specified in the file noSelect.json This includes index.js by default.
+* The function [randomSelector.js](mutation/randomSelector.js) picks a file with .js extension randomly. Specific files which shouldn't be picked from the target directory can be specified in the array ignoreFiles. This includes index.js by default.
 * Mutation functions are in [rewrite.js](/mutation/rewrite.js). Each function is randomly picked and each function picks an operator randomly to be applied on a selected .js file. Functions are improvised such that compilation errors are precluded.
 
 <a name = "harness_tag"></a>
