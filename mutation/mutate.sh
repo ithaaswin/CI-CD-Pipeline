@@ -3,49 +3,36 @@
 # $1 - URL for cloning repo
 # $2 - Path of shared folder between base Machine and VM
 # $3 - No of mutations to be run
-# $4 - User (Ubuntu/Vagrant)
+# $4 - User (ubuntu/vagrant)
 
+HOME=/home/$4
 repoName=$(basename $1 .git)
 rm -rf $repoName
 git clone --recursive $1
 
-sudo cp -rp $2/mutation .
-
-cd ~/mutation
-sudo rm -rf result.json temp1.json temp2.json log.txt Images
+cd ~
+sudo rm -rf result.json temp1.json temp2.json Images
 touch result.json temp1.json temp2.json
 sudo apt-get update
 sudo apt-get install -y jq npm imagemagick chromium-browser
 npm install puppeteer escodegen
-sudo mkdir -m 777 -p ~/mutation/Images/original
-sudo mkdir -m 777 -p ~/mutation/Images/mutated
-sudo mkdir -m 777 -p ~/mutation/Images/difference
+sudo mkdir -m 777 -p ~/Images/original
+sudo mkdir -m 777 -p ~/Images/mutated
+sudo mkdir -m 777 -p ~/Images/difference
 
 cd ~/$repoName
 npm i
 node index.js > /dev/null 2>&1 &
 process=$!
-readarray -t my_array < <(jq . /bakerx/snapshot.JSON)
 
-cd ~/mutation
-
-# for ((i=0; i<${#my_array[@]}; i++));
-# do
-# ssname=$(basename ${my_array[$i]} .md)
-# node screenshot.js ${my_array[$i]}  ~/mutation/Images/original/$ssname
-# done
-
-cat snapshot.txt | while read line
+cd ~
+totSnaps=$(jq '.snaps | length' snapshots.json)
+for (( j=0; j<$totSnaps; j++))
 do
-file_name="${line##*/}"
-fileName="${file_name%.*}"
-node screenshot.js  $line ~/mutation/Images/original/$fileName
+snapName=$(jq '.snaps['$j'].name' snapshots.json | tr -d '"')
+snapURL=$(jq '.snaps['$j'].url' snapshots.json | tr -d '"')
+node screenshot.js $snapURL ~/Images/original/$snapName
 done
-
-# node screenshot.js  http://localhost:3000/survey/long.md ~/mutation/Images/original/long
-# node screenshot.js  http://localhost:3000/survey/survey.md ~/mutation/Images/original/survey
-# node screenshot.js  http://localhost:3000/survey/variations.md ~/mutation/Images/original/variations
-
 
 kill -9 $process > /dev/null
 wait $process 2>/dev/null
@@ -56,10 +43,10 @@ changeCounter=0
 
 for (( i=1; i<=$3; i++ ))
 do
-        cd ~/mutation
+        cd ~
         mutateFile=$( node randomSelector.js ~/$repoName)
         sudo rm -rf rewriteLog.txt
-        node rewrite.js $4 $repoName $mutateFile>> rewriteLog.txt
+        node rewrite.js $4 $repoName $mutateFile >> rewriteLog.txt
 
         operation=$( cat rewriteLog.txt | head -n 1 )
         operator="${mutateFile}"
@@ -73,84 +60,76 @@ do
         sourceLine="No Line Changed"
         fi
 
+        pixelDiff=0
+        exceptionFlag=false
+        cd ~/$repoName
+        node index.js > serviceLog.txt 2>&1 &
+        process=$!
+        sudo mkdir -m 777 -p ~/Images/mutated/$i
+        sudo mkdir -m 777 -p ~/Images/difference/$i
+
+        cd ~
+        totSnaps=$(jq '.snaps | length' snapshots.json)
+        for (( j=0; j<$totSnaps; j++))
+        do
+        cd ~
+        snapFlag=false
+        snapName=$(jq '.snaps['$j'].name' snapshots.json | tr -d '"')
+        snapURL=$(jq '.snaps['$j'].url' snapshots.json | tr -d '"')
         {
-                cd ~/$repoName
-                node index.js > serviceLog.txt 2>&1 &
-                process=$!
-                sudo mkdir -m 777 -p ~/mutation/Images/mutated/$i
-                sudo mkdir -m 777 -p ~/mutation/Images/difference/$i
-
-                cd ~/mutation
-                { 
-                        node screenshot.js  http://localhost:3000/survey/upload.md ~/mutation/Images/mutated/$i/upload
-                } || { 
-                        exceptionFlag=true
-                }
-                {
-                        node screenshot.js  http://localhost:3000/survey/long.md ~/mutation/Images/mutated/$i/long
-                } || {
-                        exceptionFlag=true
-                }
-                {
-                        node screenshot.js  http://localhost:3000/survey/survey.md ~/mutation/Images/mutated/$i/survey
-                } || {
-                        exceptionFlag=true
-                }
-                {
-                        node screenshot.js  http://localhost:3000/survey/variations.md ~/mutation/Images/mutated/$i/variations
-                } || {
-                        exceptionFlag=true
-                }
-                
-                if [ $exceptionFlag = false ]
-                then
-                kill -9 $process > /dev/null
-                wait $process 2>/dev/null
-                
-                cd ~/mutation
-                compare -metric AE -fuzz 5% ~/mutation/Images/original/upload.png ~/mutation/Images/mutated/$i/upload.png ~/mutation/Images/difference/$i/upload.png  2>pixelDiff1
-                compare -metric AE -fuzz 5% ~/mutation/Images/original/long.png ~/mutation/Images/mutated/$i/long.png ~/mutation/Images/difference/$i/long.png 2>pixelDiff2
-                compare -metric AE -fuzz 5% ~/mutation/Images/original/survey.png ~/mutation/Images/mutated/$i/survey.png ~/mutation/Images/difference/$i/survey.png 2>pixelDiff3
-                compare -metric AE -fuzz 5% ~/mutation/Images/original/variations.png ~/mutation/Images/mutated/$i/variations.png ~/mutation/Images/difference/$i/variations.png 2>pixelDiff4
-
-                pixelDiff=$(( $(head -n 1 pixelDiff1)+$(head -n 1 pixelDiff2)+$(head -n 1 pixelDiff3)+$(head -n 1 pixelDiff4) ))
-
-                        if [ $pixelDiff -eq 0 ]
-                        then
-                        endResult='Not Changed'
-                        else
-                        endResult='Changed'
-                        changeCounter=$(($changeCounter+1))
-                        fi
-                fi
+                node screenshot.js $snapURL ~/Images/mutated/$i/$snapName
         } || {
                 exceptionFlag=true
+                snapFlag=true
         }
+        if $snapFlag
+        then
+        cd ~/$repoName
+        echo "Here $(cat serviceLog.txt)"
+        cp serviceLog.txt ~/Images/difference/$snapName.txt
+        node index.js > serviceLog.txt 2>&1 &
+        process=$!
+        else
+        compare -metric AE -fuzz 5% ~/Images/original/$snapName.png ~/Images/mutated/$i/$snapName.png ~/Images/difference/$i/$snapName.png  2>pixelDiffTemp
+        pixelDiff=$(( $(head -n 1 pixelDiffTemp)+$pixelDiff))
+        fi
+        done
+        
+        kill -9 $process > /dev/null
+        wait $process 2>/dev/null
 
         if $exceptionFlag
         then
         endResult='Exception'
         exceptionCounter=$(($exceptionCounter+1))
         exceptionFlag=false
+        elif [ $pixelDiff -eq 0 ]
+        then
+        endResult='Not Changed'
+        else
+        endResult='Changed'
+        changeCounter=$(($changeCounter+1))
         fi
-
+                
         json_data=$(cat <<EOF 
 {"$i":{"operator": "$operator","sourceLine": "$sourceLine","result": "$endResult"}}
 EOF
 )
 
+cd ~
 echo $json_data > temp1.json
 cat result.json > temp2.json
 jq -s add temp1.json temp2.json > result.json
 
 cd ~/$repoName
 git reset --hard > /dev/null 2>&1 &
+git clean -f -d > /dev/null 2>&1 &
 
 echo "Mutation-$i Completed"
 done
 
-cp -r ~/mutation/Images $2/mutation/
-cp ~/mutation/result.json $2/mutation/result.json
+cp -r ~/Images $2/mutation
+cp ~/result.json $2/mutation
 
 passedCounter=$(($3-$changeCounter-$exceptionCounter))
 denom=$(( $3-$exceptionCounter ))
@@ -158,4 +137,4 @@ denom=$(( $3-$exceptionCounter ))
 echo "Failed Mutants: $changeCounter"
 echo "Passed Mutants: $passedCounter"
 echo "Exception Mutants: $exceptionCounter"
-echo "Mutation Coverage: $passedCounter/$denom"
+echo "Mutation Coverage: $changeCounter/$denom"

@@ -1,5 +1,5 @@
 setup:
-  - sudo apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update
+  - sudo apt-get -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update > /dev/null
   - sudo apt-get update -y > /dev/null
   - sudo apt-get install git wget -y > /dev/null
   - sudo apt install -qq -y debconf-utils > /dev/null
@@ -37,7 +37,7 @@ jobs:
   - name: mutation-coverage
     mutation:
       url: https://github.com/chrisparnin/checkbox.io-micro-preview
-      iterations: 5
+      iterations: 20
       snapshots:
        - http://localhost:3000/survey/long.md
        - http://localhost:3000/survey/upload.md
