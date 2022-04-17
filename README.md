@@ -114,7 +114,7 @@ pipeline build mutation-coverage build.yml
 
 ## Checkpoint and Milestone Report
 
-Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/projects/1).
+Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/projects/2).
 
 #### Errors and Challenges faced
 * Unable to launch chromium browser -> add executablePath: '/usr/bin/chromium-browser' in screenshot.js  </br>
