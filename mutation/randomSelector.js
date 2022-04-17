@@ -1,6 +1,8 @@
 var fs = require('fs');
 var files = fs.readdirSync(process.argv[2]);
-const ignoreFiles = ["index.js"];
+/*******************************************************************************/
+const ignoreFiles = ["index.js"]; // Add the js files to be ignored here
+/*******************************************************************************/
 var js_files_in_directory = []
 for(let i=0; i < files.length; i++){
     if(files[i].split('.')[1] == 'js'){
