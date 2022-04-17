@@ -1,31 +1,31 @@
 # Pipeline-Template
 | Readme Loc | Git Link |
 | ----- | ----- |
-| [Automatically provision and configure a build server (20%)](#provision_tag) | [Click Here](/lib/provision.js) |
-| [Create a build job specification (20%)](#buildjob_tag) | [Click Here](/lib/build.yml) |
-| [Automatically configure a build environment for given build job specification (30%)](#buildenv_tag) | [Click Here](/lib/builder.js) |
-| [Checkpoint and Milestone report (20%)](#milestone_tag) | [Click Here](#milestone_tag) |
-| [Screencast (10%)](#screencast_tag) | [Click Here](#screencast_tag)|
-| [env file](#env_file)
+| [env file](#env_file) |[Click Here](#env_file) |
+| [M1 fixes](#m1_tag) | [Click Here](/lib/build.yml) |
+| [M2 Tasks ](#m2_tag) | [Click Here](/lib/build.yml) |
+| [Mutate Operators](#mutate_tag) | [Click Here](/mutation/rewrite.js) |
+| [Test harness](#harness_tag) | [Click Here](/mutation/mutate.sh) |
+| [Snapshot oracle and differencing](#diff_tag) | [Click Here](/mutation/mutate.sh) |
+| [mutation-coverage](#mutatecoverage_tag) | [Click Here](/mutation/mutationcoverage.txt) |
+| [ Milestone report ](#milestone_tag) | [Click Here](#milestone_tag) |
+| [Screencast ](#screencast_tag) | [Click Here](#screencast_tag)
+
+Specify file structure what file contains what info
 
 
-<a name = "provision_tag"></a>
-## Automatically provision and configure a build server
 
 ```MAC M1 requirements```
 ```text
 brew
 basicvm
 Ubuntu:Jammy Image
-Ansible
-Ansible mysql module
 ```
 ``` bash
 $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" # To install brew
 $ brew install ottomatica/ottomatica/basicvm          # To install basicvm
-$ vm pull                                             # To install Ubuntu:Jammy image -- Downloads to ~/.basicvm/BaseImages/Ubuntu/Jammy
-$ brew install ansible                                # To Install Ansible
-$ ansible-galaxy collection install community.mysql   # To install mysql module for playbook
+
+
 ```
 ```Windows/MAC Intel requirements```
 ```text
@@ -34,7 +34,7 @@ Virtual box
 Nodejs
 Bakerx
 Npm
-use bakerx to pull ubuntu focal image
+
 
 ```
 <a name = "env_file"></a>
@@ -43,63 +43,82 @@ use bakerx to pull ubuntu focal image
 ```bash
 # Add the following env variables for any OS
 vm_name = Name_Of_VM                # Ex: vm-server
-git_user = Name_Of_GitUser          # Ex: wolf@ncsu.edu
 git_token = Git_Token               # Ex: 123adsfh32jjhg
-db_user = hari                      # set the username of mysql
 db_pass = 12345                     # set the password of mysql 
 
 # Add the following for Windows and MAC Intel
 ip_address = 192.168.52.100         # Any ip can be assigned
-config_vm_name = Config_VM_Name     # Ex:config-server
-ip_address_config = Config_VM_IP    # Ex: 192.168.64.121
-key_name = vm-server                # To create public and private key
+
 memory = 4096                       # RAM to be assigned for vm --Recommended to use atleast 4GB
 # Please make sure no comment lines are in .env file
 ```
-
-For MAC M1, the host machine is used to directly connect with web-server and run the build file.
-
-For Windows and Mac Intel, we create a config server and use it to connect and maintain web-server which is the end point.
+<a name = "m1_tag"></a>
+## M1 fixes
+ * pull image only if it doesnt exist
+	we used grep to search for the ubuntu focal image, if it doesnt exist, pull new image. else if it exist, dont pull image and create the virtual machine. check out changes in [Provision.js](/lib/provision.js)
+* we changed build.yml from ansible format to specified format and performed M1 task.</br>
+ 	We have modified the code in such a way that there is no requirement of ansible installation and inventory file</br>
+	we parsed the build.yml file using [builder.js](/lib/builder.js). we ssh into the vm and execute the cmnds from [build.yml](/lib/build.yml) </br>
+	We parse the build.yml as json object and execute the cmnds inside the vm
 
 ```bash
 pipeline init
 ```
-When pipeline init is executed, the script will detect the processor (M1, Intel) and call the respective function to create the virtual machine(provision.js)</br>
-The script will store the connection information of virtual machine is stored in config.json and will config inventory file, which will change for every init step by varying values </br>
-For windows, the script will install ansible in the config server and it will generate and copies the key pair to respective paths inside the virtual machines.</br>
-
-
-For MAC M1, nameserver is added to the /etc/resolv.conf so that a connection with ports.ubuntu.com can be established.</br>
-
 ```bash
 pipeline build itrust-build build.yml
 ```
-[click here](/commands/init.js) to check init.js
+<a name = "m2_tag"></a>
 
-[click here](/lib/provision.js) to check provision.js
+## M2 Tasks
+we use [screenshot.js](/mutation/screenshot.js) to capture the screenshot of the file at the given port.
+<a name = "mutate_tag"></a>
+## Mutate Operators
+*   We have defined all types of mutation operators in [rewrite.js](/mutation/rewrite.js) based on requirements  to be performed on any given .js file(randomly selected from mutate.sh).
+*   This javascript file will select a random mutation operator and performs the mutation on the selected .js file
 
-<a name = "buildjob_tag"></a>
+<a name = "harness_tag"></a>
 
-## Create a build job specification
+## Test harness
 
-The build.yml file has all the setup and job specifications required to be run inside the build server. Tag 'itrust-build' is assigned for setting up itrust and running the application.
+*   we perform the mutation  by executing [mutate.sh](/mutation/mutate.sh) and the  images are store in mutation/images/ folder.
+*	we generate the orignal snapshots from the url defined in build.yml, we can add more number of urls in build.yml.
+*	The [builder.js](/lib/builder.js) file will perform the jobs based on the provided job name by verifiying it in <<build.yml link>>.
+* original images are stored inside [original](/mutation/Images/original/) folder
+* mutated images are store inside [mutated](/mutation/Images/mutated/) folder
+*   differences in images are stored in [difference](/mutation/Images/difference/) folder
 
-[Click here](/lib/build.yml) to check build.yml
+ For mutation-coverage, the builder.js  will capture the details of mutation snapshot urls and  writes to snapshot.json file and will execute the lib/mutation/mutate.sh script
 
-<a name = "buildenv_tag"></a>
-For windows: The build script executes and ssh into config server and executes the ansible playbook to install & clone the itrust and other dependencies inside the vm-server(destination).</br>
-It will fetch credentials for git and sql from .env file and executes the ansible playbook, which installs dependencies and runs maven test and cleans the build environment so that no issues occur for next builds.</br>
+The mutate.sh will</br>
+		
+*   it will clone the [microservice](https://github.com/chrisparnin/checkbox.io-micro-preview) 
 
-## Automatically configure a build environment for given build job specification
+*   capture original snapshots from the urls retrieved from snapshot.txt by using the index.js service and save to  [original](/mutation/Images/original/) and kill the service
+*   Now for every iteration, it will execute [randomSelector.js](/mutation/randomSelector.js) and picks up a random js file from the given location and mutates the js file by performing a random mutation  by executing the rewrite.js
+
+<a name = "diff_tag"></a>
+
+## Snapshot oracle and differencing
+snapshot differences are stored in [difference](/mutation/Images/difference/) 
+*   we use imageMagick to find the difference between the original and mutated image and store them in differences folder.
+if they have differences, we calculate pixel differences between the images and decide if the image is changed or not. Based on the output we categorise it as changed or not.
+if there is an exception, the exception log will be stored in the difference folder
+
+<a name = "mutatecoverage_tag"></a>
+
+## mutation-coverage
+[mutation-coverage](/mutation/mutationCoverage.txt)
+For every mutation, the results are stored into [result.json](/mutation/result.json).
+*  It stores the .js file which should be mutated and the mutation operator. Along with this, the result.JSON will also store the source line and the changes made and also it stores the result of the mutation on the snapshot. i.e., whether the snapshot has been changed, not changed or exception.
+The final mutation coverage details are stored in [mutation-coverage](/mutation/mutationCoverage.txt)
 
 ```bash
-pipeline build itrust-build build.yml
+pipeline build mutation-coverage build.yml
 ```
 
-The above command calls build.js which calls builder.js and execute the jobs defined in build.yml targeting build server.
 
-[Click here](/commands/build.js) to check build.js
-[Click here](/lib/builder.js) to check builder.js
+
+
 
 <a name = "milestone_tag"></a>
 
@@ -109,32 +128,14 @@ The above command calls build.js which calls builder.js and execute the jobs def
 
 Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/projects/1).
 
-Issues faced before checkpoint are [here](/CHECKPOINT-M1.md). submitted on [3/2/2022](./Pictures/checkpoint.png)
-
-##### For MAC M1
-*   Installing Ansible on MAC M1 was simple but Ansible was throwing different errors than when using json file and to parse and running commands on build server.
-*   Initially Ansible was running build.yml smoothly. Then [package not found error](/Pictures/Errors/Package%20Matching%20-%202.png) started appearing. The error was not self explanatory as the error was sporadic and root cause was not found.
-*   Sometimes [DPKG was locked](/Pictures/Errors/DPKG%20Process%20Held.png) and Ansible couldn't complete installation process. This happened because before dpkg was released after an installation another package was trying to access it.
-*   [DPKG process captured](/Pictures/Errors/DPKG%20Subprocess.png) happens if I force quit build server while an installtion is happening. Manually to resolve this, we need to find the PID capturing the dpkg and force stop the proces.
-*   Finally to resolve the above errors, I found that one of the reasons was that my build server was not able to contact [ports.ubuntu.com](/Pictures/Errors/Ports.png). This is one of the prime reasons why the package missing was also occuring. I was stuck at this point for about 3 full days. There were not really helpful resources available even online on this issue as this is happening only with MAC M1.
-*   I tried to automate the process of updating nameserver in init.js but the resolv.conf is being re-written once the ssh command execution is complete and the process is ending.
-*   Used Ansible playbook to finish this process. This is exclusive to MAC M1.
-*   Sometimes faced dpkg locked error even before the first process is executed. So, automated the process of removing lock whenever build.yml is called.
-*   Made sure that each time a init is ran, a new vm instance is created. If an old vm with same name is available, it is removed without any user interruption.
-
-##### For Windows(Intel/Amd) processor
-*   Storing information from vm to json file was easy, but to run ansible-playbook, we have to use different ip than local loop id and also, we need to use the private public key pair generated for connecting two vms.  We have to fetch the Ip address from env file and also path of the new public key  of the destination vm required for inventory.</br>
-*   We tried to install ansible for windows in multiple ways, but not found a single useful way, as it messes up with the hyper visor and results in Vbox vm error. We came up with the solution to create a new config server and scripted the code to act this config server as a new local host, which will execute the ansible playbook inside the desination or final vm. To do this we followed CM workshop as a reference.
-*   Generating inventory file from config.Json initially resulted in unable to parse  the inventory error. We used logger.write to write the inventory file</br>
-*   Memory issue ->while we are running, pipeline build itrust-build build.yml with vm memory as 2048, we are facing time out issue while installing maven dependencies, so we configured env variable to 4096 and executing the script.
-*   The error can be seen below if less memory is assigned in .env file
-```
-Failed to connect to MBean server at port 9001: Could not invoke shutdown operation: Spring application did not start before the configured timeout (30000ms -> [Help 1]
-```
-*   Dpkg error->Sometimes we are facing dpkg lock error and ansible couldn’t complete the process, we edited the script to kill the existing dpkg process </br>
-*   We faced difficulties to replace the username and password in application.yml file. we used regex to find the pattern and replace it with new username and password.
-*   Mysql access denied -> We faced Access denied while creating new user and editing password due to not found credentials in.my.cnf file so we copied the file to root path as it was not recognisible.
-*   Mysql Error -> when we try to run the build [multiple times](/Pictures/Errors/SQL_error_multiple_build.png), we faced access denied for user root, so we clean the build environment at the end of script by creating a new user and deleting the user at the end of the script.
+##### Errors
+dpkg error</br>
+unable to launch chromium browser--> add executablePath: '/usr/bin/chromium-browser' in screenshot.js  </br>
+issues while setting mysql password </br>
+parsing snapshot.json file </br>
+*   Dpkg error->Sometimes we are facing dpkg lock error and  couldn’t complete the process, we edited the script(function call for dpkg) to kill the existing dpkg process </br>
+*   Mysql access denied -> we fixed this issue with the help of set deb conf utils in the set up part of build.yml
+*   Mysql Error -> when we try to run the itrust-build , we faced access denied for user root, so we clean the build environment at the end of script by creating a new user and deleting the user at the end of the script.
 
 
 <a name = "screencast_tag"></a>
