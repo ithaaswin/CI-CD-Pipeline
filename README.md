@@ -54,8 +54,7 @@ memory = 4096                       # RAM to be assigned for vm --Recommended to
 ```
 <a name = "m1_tag"></a>
 ## M1 fixes
- * pull image only if it doesnt exist
-	we used grep to search for the ubuntu focal image, if it doesnt exist, pull new image. else if it exist, dont pull image and create the virtual machine. check out changes in [Provision.js](/lib/provision.js)
+ * pull image only if it doesnt exist--> For this we used grep to search for the ubuntu focal image, if it doesnt exist, pull new image. else if it exist, dont pull image and create the virtual machine. check out changes in [Provision.js](/lib/provision.js)
 * we changed build.yml from ansible format to specified format and performed M1 task.</br>
  	We have modified the code in such a way that there is no requirement of ansible installation and inventory file</br>
 	we parsed the build.yml file using [builder.js](/lib/builder.js). we ssh into the vm and execute the cmnds from [build.yml](/lib/build.yml) </br>
