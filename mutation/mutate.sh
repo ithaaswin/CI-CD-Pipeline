@@ -52,7 +52,6 @@ exceptionFiles=""
 
 cd ~
 mutateFile=$( node randomSelector.js ~/$repoName)
-mutateFile=marqdown.js
 sudo rm -rf rewriteLog.txt
 node rewrite.js $4 $repoName $mutateFile >> rewriteLog.txt
 
