@@ -8,20 +8,27 @@
 | [Test harness](#harness_tag) | [Click Here](/mutation/mutate.sh) |
 | [Snapshot oracle and differencing](#diff_tag) | [Click Here](/mutation/mutate.sh) |
 | [mutation-coverage](#mutatecoverage_tag) | [Click Here](/mutation/mutationcoverage.txt) |
-| [ Challenges and Errors ](#milestone_tag) | [Click Here](#milestone_tag) |
+| [ Milestone report ](#milestone_tag) | [Click Here](#milestone_tag) |
 | [Screencast ](#screencast_tag) | [Click Here](#screencast_tag)
 
+Specify file structure what file contains what info
+
+
+
 ```MAC M1 requirements```
+
 ```text
 brew
 basicvm
-Ubuntu:Jammy Image
 ```
+
 ``` bash
 $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" # To install brew
 $ brew install ottomatica/ottomatica/basicvm          # To install basicvm
 ```
+
 ```Windows/MAC Intel requirements```
+
 ```text
 Choco
 Virtual box
@@ -29,7 +36,9 @@ Nodejs
 Bakerx
 Npm
 ```
+
 <a name = "env_file"></a>
+
 ```.env file```
 ```bash
 # Add the following env variables for any OS
@@ -44,81 +53,83 @@ memory = 4096                       # RAM to be assigned for vm --Recommended to
 ```
 <a name = "m1_tag"></a>
 ## M1 fixes
- * pull image only if it doesnt exist--> For this we used grep to search for the ubuntu focal image, if it doesnt exist, pull new image. else if the image exist, dont pull image and create the virtual machine. check out changes in [Provision.js](/lib/provision.js)
-* we changed build.yml from ansible format to specified format and performed M1 task.</br>
- 	We have modified the code in such a way that there is no requirement of ansible installation and inventory file</br>
-	we parsed the build.yml file using [builder.js](/lib/builder.js). we ssh into the vm and execute the cmnds from [build.yml](/lib/build.yml) </br>
-	We parse the build.yml as json object and execute the cmnds inside the vm
+ * Pull image only if it doesnt exist. We used grep to search for the ubuntu image and if it doesn't exist, we pull new image. Our changes for this can be found in [provision.js](/lib/provision.js)
+* We changed build.yml from ansible-playbook format to given M1 format and performed M1 task.
+* The dependency on Ansible and its requirement for pre-installation is removed completely.
+* We parsed the build.yml file using [builder.js](/lib/builder.js) and the build.yml is only called using builder.js which is triggered when build command is used.
+* Build logs are completely pushed into the terminal for view without any masking
 
 ```bash
 pipeline init
 ```
+
 ```bash
 pipeline build itrust-build build.yml
 ```
+
 <a name = "m2_tag"></a>
 
 ## M2 Tasks
-we use [screenshot.js](/mutation/screenshot.js) to capture the screenshot of the file at the given port.
+we use [screenshot.js](/mutation/screenshot.js) to capture the screenshot of a file at the given port.
+
 <a name = "mutate_tag"></a>
+
 ## Mutate Operators
-*   We have defined all types of mutation operators in [rewrite.js](/mutation/rewrite.js) based on requirements  to be performed on any given .js file(randomly selected from mutate.sh).
-*   This javascript file will select a random mutation operator and performs the mutation on the selected .js file
+* The function [randomSelector.js](mutation/randomSelector.js) picks a file with .js extension randomly. Specific files which shouldn't be picked from the target directory can be specified in the file noSelect.json This includes index.js by default.
+* Mutation functions are in [rewrite.js](/mutation/rewrite.js). Each function is randomly picked and each function picks an operator randomly to be applied on a selected .js file. Functions are improvised such that compilation errors are precluded.
 
 <a name = "harness_tag"></a>
 
 ## Test harness
-
-*	we perform the mutation  by executing [mutate.sh](/mutation/mutate.sh) and the  images are store in mutation/images/ folder.
-*	we generate the orignal snapshots from the url defined in build.yml, we can add more number of urls in build.yml.
-*	The [builder.js](/lib/builder.js) file will perform the jobs based on the provided job name by verifiying it in <<build.yml link>>.
-* 	original images are stored inside [original](/mutation/Images/original/) folder
-* 	mutated images are store inside [mutated](/mutation/Images/mutated/) folder
-*   differences in images are stored in [difference](/mutation/Images/difference/) folder
-
- For mutation-coverage, the builder.js  will capture the details of mutation snapshot urls and  writes to snapshot.json file and will execute the lib/mutation/mutate.sh script
-
-The mutate.sh will</br>
-		
-*   it will clone the [microservice](https://github.com/chrisparnin/checkbox.io-micro-preview) 
-
-*   capture original snapshots from the urls retrieved from snapshot.json by using the index.js service and save to  [original](/mutation/Images/original/) and kill the service
-*   Now for every iteration, it will execute [randomSelector.js](/mutation/randomSelector.js) and picks up a random js file from the given location and mutates the js file by performing a random mutation  by executing the rewrite.js
+* The [builder.js](/lib/builder.js) file will perform the jobs based on the job name by verifiying it in [build.yml](lib/build.yml).
+* The mutation is triggered by the job-name *mutation-coverage* which executes [runMutation.sh](lib/runMutation.js). The script in turn calls [mutate.sh](mutation/mutate.sh) inside the vm and so we do not ssh into vm for executing each of the commands.
+* [builder.js](lib/builder.js) captures the details of mutation snapshot urls and the details of the .md file to be rendered into mutation/snapshots.json
+* Original images taken before performing any mutations are stored inside [mutation/Images/original](/mutation/Images/original/)
+* Mutated images are store inside [mutation/Images/mutated](/mutation/Images/mutated/) for each of the iteration.
+* Difference images are stored at [mutation/Images/difference](/mutation/Images/difference/) for each of the iteration.
+* If a screenshot is unable to be captured the iteration is marked as an exception and the corresponding log file is copied into the difference instead of a difference image.
 
 <a name = "diff_tag"></a>
 
 ## Snapshot oracle and differencing
-snapshot differences are stored inside [difference](/mutation/Images/difference/) folder
-*   we use imageMagick to find the difference between the original and mutated image and store them in differences folder.
-if they have differences, we calculate pixel differences between the images and decide if the image is changed or not. Based on the output we categorise it as changed or not.
-if there is an exception, the exception log will be stored in the difference folder
+* Snapshot differences are stored in [mutation/Images/difference](/mutation/Images/difference/) 
+* imageMagick is used to find the difference between the original and mutated image and store them in difference/mutation_Number.
+* If a mutated image is generated, the pixel difference between the former and it's original image with a 5% fuzz is calculated.
+* If one of the image is not generated, the mutation is marked as exception and if all the images are same as original, the mutation is marked to be No Change and otherwise as changed.
 
 <a name = "mutatecoverage_tag"></a>
 
 ## mutation-coverage
-For every mutation, the results are stored into [result.json](/mutation/result.json).</br>
-For simplicity we have uploaded the 1000 mutation images and the results and mutation-coverage are uploaded inside a new folder (/1000 Mutations/).</br>
-*  It stores the .js file which should be mutated and the mutation operator. Along with this, the result.JSON will also store the source line and the changes made and also it stores the result of the mutation on the snapshot. i.e., whether the snapshot has been changed, not changed or exception.
-The final mutation coverage details are stored in [mutation-coverage](/mutation/mutationCoverage.txt)
+* [mutation-coverage](/mutation/mutationCoverage.txt) has the final result of the mutations run.
+* The detailed result of the images failed, passed or an exception for each mutation is stored into [result.json](/mutation/result.json) with the key as mutation number.
+* The images generated for the job is found at Images[mutation/Images] which hold the original, mutated and the difference images for all the mutations.
+* The results of the 1000 mutations ran is stored at [1000 Mutations](1000 Mutations). 
 
 ```bash
 pipeline build mutation-coverage build.yml
 ```
+
+
 <a name = "milestone_tag"></a>
 
-## Challenges and Errors
+## Checkpoint and Milestone Report
 
 ### Challenges Faced:
 
-Our issues can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/issues).
-We faced challenges to parse the snapshot urls from build.yml in shell script, when we tried to dynamically import the urls from job names. We used jq module to get over from this challenge.parsing snapshot.json file </br>
-we faced challenges to set my sql password in application.yml--> we use sed command to set password
-### Errors
-*   unable to launch chromium browser--> we faced this issue only with windows, for mac it was working fine. To resolve this we have  added executablePath: '/usr/bin/chromium-browser' in screenshot.js for the chromium browser path </br>
-*   Dpkg error->Sometimes we are facing dpkg lock error and  couldn’t complete the process, we edited the script(function call for dpkg) to kill the existing dpkg process </br>
-*   Mysql access denied -> we fixed this issue with the help of set deb conf utils in the set up part of build.yml
-*   Mysql Error -> when we try to run the itrust-build , we faced access denied for user root, so we clean the build environment at the end of script by creating a new user and deleting the user at the end of the script.
-* we faced connection error unable to contatc host --> we fixed this and added code to the implementation so that it never occurs
+Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/projects/1).
+
+##### Errors and Challenges
+* Unable to launch chromium browser -> add executablePath: '/usr/bin/chromium-browser' in screenshot.js  </br>
+* To parse snapshots.json file. This was challenging as we were trying to clean data inside the bash script. Finally we sent the exact data by doing the data cleaning in js before saving data into snapshots.json
+* Dpkg error. Sometimes we were facing dpkg lock error and couldn’t complete the process. We handled this by killing the dpkg processes each time before a job is run this way preventing a run time error even when a process is force stopped and restarted.
+* Mysql access denied -> Fixed this issue with the help of set deb conf utils in the set up part of build.yml
+* There was a issue with how the same command is being parsed by Mac and windows. This was mainly happening because of the use of quotes inside a command which cannot be avoided. Found work arounds and fixed all these issues.
+* Mysql Error -> when we try to run the itrust-build , we faced access denied for user root, so we clean the build environment at the end of script by creating a new user and deleting the user at the end of the script.
+* Our first approach for M2 was to sshing each command of script into the vm. This gave rise to multiple issues as the state of vm is not guarenteed after the vm is closed. Fixed this my invoking the main script only inside the vm.
+* Pug error was one of the very common errors faced due to the mismatch of directories that was happening due to the reason stated above.
+* Admin previleges for many commands was asked and this was giving errors even to create a file. Fixed this by running bash script as a sudo.
+* The if else function was a very 
+
 
 <a name = "screencast_tag"></a>
 ## Screencast 
