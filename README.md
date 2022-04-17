@@ -92,7 +92,7 @@ The mutate.sh will</br>
 		
 *   it will clone the [microservice](https://github.com/chrisparnin/checkbox.io-micro-preview) 
 
-*   capture original snapshots from the urls retrieved from snapshot.txt by using the index.js service and save to  [original](/mutation/Images/original/) and kill the service
+*   capture original snapshots from the urls retrieved from snapshot.json by using the index.js service and save to  [original](/mutation/Images/original/) and kill the service
 *   Now for every iteration, it will execute [randomSelector.js](/mutation/randomSelector.js) and picks up a random js file from the given location and mutates the js file by performing a random mutation  by executing the rewrite.js
 
 <a name = "diff_tag"></a>
