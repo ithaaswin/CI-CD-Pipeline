@@ -1,0 +1,16 @@
+#! /bin/rm -rf
+
+# $1 - ubuntu/vagrant
+
+HOME=/home/$1
+
+sudo systemctl restart systemd-timesyncd.service
+sudo systemctl stop unattended-upgrades
+sudo systemctl disable unattended-upgrades
+sudo systemctl stop apt-daily.timer
+sudo rm -rf /var/lib/dpkg/lock
+sudo rm -rf /var/lib/dpkg/lock-fronten
+sudo rm -rf /var/lib/apt/lists/lock
+sudo rm -rf /var/cache/apt/archives/lock
+
+shred -u $0

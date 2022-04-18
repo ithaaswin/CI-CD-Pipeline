@@ -10,10 +10,10 @@ repoName=$(basename $1 .git)
 rm -rf $repoName
 git clone --recursive $1
 
-rm -rf $2/mutation/Images $2/mutation/result.json
+rm -rf $2/mutation/Images $2/mutation/result.json $2/mutation/mutationCoverage.txt
 
 cd ~
-sudo rm -rf result.json temp1.json temp2.json Images
+sudo rm -rf result.json temp1.json temp2.json Images mutationCoverage.txt pixelDiff pixelDiffTemp rewriteLog.txt
 touch result.json temp1.json temp2.json
 sudo apt-get update
 sudo apt-get install -y jq npm imagemagick chromium-browser
@@ -149,7 +149,8 @@ cp ~/result.json $2/mutation
 passedCounter=$(($3-$changeCounter-$exceptionCounter))
 denom=$(( $3-$exceptionCounter ))
 
-rm -rf $2/mutation/mutationCoverage.txt mutationCoverage.txt
+cd ~
+
 echo "*************************************************************************************************" >> mutationCoverage.txt
 echo "********************************** Mutation Coverage Results ************************************" >> mutationCoverage.txt
 echo "Failed Mutants: $changeCounter" >> mutationCoverage.txt
@@ -161,3 +162,6 @@ echo "**************************************************************************
 cp mutationCoverage.txt $2/mutation/mutationCoverage.txt
 echo ""
 cat mutationCoverage.txt
+
+sudo rm -rf result.json temp1.json temp2.json Images mutationCoverage.txt pixelDiff pixelDiffTemp rewriteLog.txt snapshots.json randomSelector.js screenshot.js rewrite.js $repoName
+shred -u $0

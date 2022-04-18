@@ -2,13 +2,10 @@ setup:
   - sudo apt-get -qqq -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update
   - sudo apt-get -qqq update -y
   - sudo apt-get -qqq install git wget -y
-  - sudo apt-get -qqq install -y debconf-utils
-  - export DEBIAN_FRONTEND=\"noninteractive\"
+  - sudo DEBIAN_FRONTEND=noninteractive apt-get -qqq install -y debconf-utils
+  - sudo debconf-set-selections <<< 'debconf debconf/frontend select Noninteractive'
   - sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password {{mysql_pass}}'
   - sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password {{mysql_pass}}'
- 
-Variable:
-  - DEBIAN_FRONTEND=\"noninteractive\"
 
 jobs:
   - name: itrust-build
