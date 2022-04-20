@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.26.1",
     "chalk": "^4.1.2",
     "dotenv": "^16.0.0",
     "hasbin": "^1.2.3",

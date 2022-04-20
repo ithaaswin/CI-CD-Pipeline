@@ -9,5 +9,5 @@ exports.builder = yargs => {
 };
 
 exports.handler = async argv => {
-    await droplet.DigitalOceanProvider();
+    await droplet.createDroplet();
 };
