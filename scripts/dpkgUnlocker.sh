@@ -1,5 +1,4 @@
 #! /bin/rm -rf
-
 # $1 - ubuntu/vagrant
 
 HOME=/home/$1

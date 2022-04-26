@@ -3,9 +3,9 @@ setup:
   - sudo apt-get -qqq update -y
   - sudo apt-get -qqq install git wget -y
   - sudo DEBIAN_FRONTEND=noninteractive apt-get -qqq install -y debconf-utils
-  - sudo debconf-set-selections <<< 'debconf debconf/frontend select Noninteractive'
-  - sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password password {{mysql_pass}}'
-  - sudo debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password {{mysql_pass}}'
+  - sudo debconf-set-selections <<< "'"debconf debconf/frontend select Noninteractive"'"
+  - sudo debconf-set-selections <<< "'"mysql-server mysql-server/root_password password {{mysql_pass}}"'"
+  - sudo debconf-set-selections <<< "'"mysql-server mysql-server/root_password_again password {{mysql_pass}}"'"
 
 jobs:
   - name: itrust-build
@@ -29,16 +29,31 @@ jobs:
       - name: create application.yml file
         run: cp iTrust2-v10/iTrust2/src/main/resources/application.yml.template iTrust2-v10/iTrust2/src/main/resources/application.yml
       - name: set password in application.yml
-        run: sed -i 's/password\:/password\:\ {{mysql_pass}}/g' iTrust2-v10/iTrust2/src/main/resources/application.yml
+        run: sed -i "'"s/password\:/password\:\ {{mysql_pass}}/g"'" iTrust2-v10/iTrust2/src/main/resources/application.yml
       - name: test iTrust1
         run: mvn -f iTrust2-v10/iTrust2 --batch-mode --update-snapshots clean test
   
   - name: mutation-coverage
     mutation:
       url: https://github.com/chrisparnin/checkbox.io-micro-preview
-      iterations: 1000
+      iterations: 5
       snapshots:
        - http://localhost:3000/survey/long.md
        - http://localhost:3000/survey/upload.md
        - http://localhost:3000/survey/survey.md
        - http://localhost:3000/survey/variations.md
+
+  - name: itrust-deploy
+    steps: 
+      - name: install JRE
+        run: sudo apt-get install default-jre -y
+      - name: install JDK
+        run: sudo apt-get -qqq install openjdk-11-jdk -y
+      - name: install Maven
+        run: sudo apt-get -qqq install maven -y ; export PATH=/opt/apache-maven-3.8.4/bin:$PATH 
+      - name: install nodejs
+        run: sudo apt-get -qqq install nodejs -y
+      - name: install npm
+        run: sudo apt-get -qqq install npm -y   
+      - name: install mysql
+        run: sudo apt-get -qqq install -y mysql-server

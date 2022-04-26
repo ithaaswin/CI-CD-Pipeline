@@ -7,5 +7,5 @@ exports.builder = yargs => {
 };
 exports.handler = async argv => {
     const{job_name, build_path, processor} = argv;
-    await builder.build_job(processor, build_path, job_name);
+    await builder.build_job(processor, job_name, build_path);
 };
