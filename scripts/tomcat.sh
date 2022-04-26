@@ -1,7 +1,9 @@
 #!/bin/bash
-tomcatStatus=$(apt list --installed | grep tomcat | awk '{if(NR==1) print $0}')
-if [ -z "$tomcatStatus"]
+tomcatStatus=$(ls /opt | grep tomcat)
+if [ -z "$tomcatStatus" ]
 then
+echo "Inside if statement"
+echo "$tomcatStatus"
 sudo groupadd tomcat
 sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
 cd /tmp
@@ -13,7 +15,7 @@ sudo chgrp -R tomcat /opt/tomcat
 sudo chmod -R g+r conf
 sudo chmod g+x conf
 sudo chown -R tomcat webapps/ work/ temp/ logs/
-JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-arm64
+JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
 CATALINA_HOME=/opt/tomcat
 
 cat << EOF > /etc/systemd/system/tomcat.service
@@ -24,7 +26,7 @@ After=network.target
 [Service]
 Type=forking
 
-Environment=JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-arm64
+Environment=JAVA_HOME=/usr/lib/jvm/java-1.11.0-openjdk-amd64
 Environment=CATALINA_PID=/opt/tomcat/temp/tomcat.pid
 Environment=CATALINA_HOME=/opt/tomcat
 Environment=CATALINA_BASE=/opt/tomcat
@@ -46,6 +48,7 @@ EOF
 
 sudo systemctl daemon-reload
 sudo systemctl start tomcat
+sudo systemctl restart tomcat
 sudo ufw allow 8080
 sudo systemctl enable tomcat
 
@@ -56,10 +59,12 @@ sudo chmod -R 777 $CATALINA_HOME
 sed -ie '/<\/tomcat-users>/i \\t <role rolename="manager-gui"\/> \
 \t <role rolename="manager-script"\/> \
 \t <user username="admin" password="password" roles="manager-gui, manager-script"\/>' /opt/tomcat/conf/tomcat-users.xml
+sed -ie '/<Valve/i <!--' /opt/tomcat/webapps/manager/META-INF/context.xml
+sed -ie '/<Manager/i -->' /opt/tomcat/webapps/manager/META-INF/context.xml
+sed -ie '/<Valve/i <!--' /opt/tomcat/webapps/host-manager/META-INF/context.xml
+sed -ie '/<Manager/i -->' /opt/tomcat/webapps/host-manager/META-INF/context.xml
+sudo systemctl restart tomcat
 fi
-# <role rolename="manager-gui"/>
-# <role rolename="manager-script"/>
-# <user username="admin" password="password" roles="manager-gui, manager-script"/>
 
 
 # Goes into pom.xml
@@ -69,21 +74,11 @@ fi
 #     <artifactId>tomcat7-maven-plugin</artifactId>
 #     <version>2.2</version>
 #     <configuration>
-#         <url>http://localhost:8080/manager/text</url>
+#         <url>http://localhost:8080/iTrust2</url>
 #         <server>TomcatServer</server>
 #         <path>/myapp</path>
 #     </configuration>
 # </plugin>
-
-
-# Comment lines in these two places
-# sudo nano /opt/tomcat/webapps/manager/META-INF/context.xml
-# sed -ie '/<Valve/i <!--' /opt/tomcat/webapps/manager/META-INF/context.xml
-# sed -ie '/<Manager/i -->' /opt/tomcat/webapps/manager/META-INF/context.xml
-# # sudo nano /opt/tomcat/webapps/host-manager/META-INF/context.xml
-# sed -ie '/<Valve/i <!--' /opt/tomcat/webapps/host-manager/META-INF/context.xml
-# sed -ie '/<Manager/i -->' /opt/tomcat/webapps/host-manager/META-INF/context.xml
-# sudo systemctl restart tomcat
 
 
 # sed -ie '/@Bean/i \\t @Override \
