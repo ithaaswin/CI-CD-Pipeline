@@ -10,6 +10,7 @@ exports.builder = yargs => {
 
 exports.handler = async argv => {
     const { processor } = argv;
-    await droplet.keyGen(processor);
+    await droplet.keyGen();
+    await droplet.keyToDroplet(processor);
     await droplet.createDroplet();
 };

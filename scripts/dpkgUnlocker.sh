@@ -1,7 +1,7 @@
 #! /bin/rm -rf
-# $1 - ubuntu/vagrant
+# $1 - {home/[ubuntu/vagrant]} or root
 
-HOME=/home/$1
+HOME=$1
 
 sudo systemctl restart systemd-timesyncd.service
 sudo systemctl stop unattended-upgrades
