@@ -1,0 +1,41 @@
+diff --git a/iTrust2/pom.xml b/iTrust2/pom.xml
+index f799cb1..eacc1e6 100644
+--- a/iTrust2/pom.xml
++++ b/iTrust2/pom.xml
+@@ -10,6 +10,7 @@
+ 		<relativePath /> <!-- lookup parent from repository -->
+ 	</parent>
+ 	<groupId>edu.ncsu.csc</groupId>
++	<packaging>war</packaging>
+ 	<artifactId>iTrust2</artifactId>
+ 	<version>10</version>
+ 	<name>iTrust2</name>
+@@ -37,6 +38,11 @@
+ 			<groupId>org.springframework.boot</groupId>
+ 			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+ 		</dependency>
++		<dependency>
++			<groupId>org.springframework.boot</groupId>
++			<artifactId>spring-boot-starter-tomcat</artifactId>
++			<scope>provided</scope>
++		</dependency>
+ 		<dependency>
+ 			<groupId>org.springframework.boot</groupId>
+ 			<artifactId>spring-boot-starter-web</artifactId>
+@@ -209,6 +215,16 @@
+ 				</executions>
+ 			</plugin>
+ 			
++			<plugin>
++				<groupId>org.apache.tomcat.maven</groupId>
++				<artifactId>tomcat7-maven-plugin</artifactId>
++				<version>2.2</version>
++				<configuration>
++					<url>http://localhost:8080/iTrust2-10</url>
++					<server>TomcatServer</server>
++					<path>/iTrust2</path>
++				</configuration>
++			</plugin>
+ 			<plugin>
+ 				<groupId>org.jacoco</groupId>
+ 				<artifactId>jacoco-maven-plugin</artifactId>

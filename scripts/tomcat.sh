@@ -2,8 +2,6 @@
 tomcatStatus=$(ls /opt | grep tomcat)
 if [ -z "$tomcatStatus" ]
 then
-echo "Inside if statement"
-echo "$tomcatStatus"
 sudo groupadd tomcat
 sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
 cd /tmp

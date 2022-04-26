@@ -25,13 +25,19 @@ jobs:
       - name: Delete old itrust
         run: sudo rm -rf iTrust2-v10
       - name: clone iTrust
-        run: git clone --recursive https://{{git_token}}@github.ncsu.edu/engr-csc326-staff/iTrust2-v10.git           
+        run: git clone --recursive https://{{git_token}}@github.ncsu.edu/engr-csc326-staff/iTrust2-v10.git
       - name: create application.yml file
         run: cp iTrust2-v10/iTrust2/src/main/resources/application.yml.template iTrust2-v10/iTrust2/src/main/resources/application.yml
       - name: set password in application.yml
         run: sed -i "'"s/password\:/password\:\ {{mysql_pass}}/g"'" iTrust2-v10/iTrust2/src/main/resources/application.yml
+      - name: copy patch
+        run: sudo cp -rp {{shared_path}}/patch/* ~/iTrust2-v10
+      - name: fix patch
+        run: cd ~/iTrust2-v10 && git apply ITrust2Application.patch pom.patch
       - name: test iTrust1
         run: mvn -f iTrust2-v10/iTrust2 --batch-mode --update-snapshots clean test
+      - name: create war file
+        run: mvn -f iTrust2-v10/iTrust2 clean package
   
   - name: mutation-coverage
     mutation:
