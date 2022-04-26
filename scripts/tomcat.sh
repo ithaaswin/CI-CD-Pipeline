@@ -1,3 +1,7 @@
+#!/bin/bash
+tomcatStatus=$(apt list --installed | grep tomcat | awk '{if(NR==1) print $0}')
+if [ -z "$tomcatStatus"]
+then
 sudo groupadd tomcat
 sudo useradd -s /bin/false -g tomcat -d /opt/tomcat tomcat
 cd /tmp
@@ -37,7 +41,7 @@ RestartSec=10
 Restart=always
 
 [Install]
-WantedBy=multi-user.target
+WantedBy=multi-user.target 
 EOF
 
 sudo systemctl daemon-reload
@@ -52,13 +56,14 @@ sudo chmod -R 777 $CATALINA_HOME
 sed -ie '/<\/tomcat-users>/i \\t <role rolename="manager-gui"\/> \
 \t <role rolename="manager-script"\/> \
 \t <user username="admin" password="password" roles="manager-gui, manager-script"\/>' /opt/tomcat/conf/tomcat-users.xml
+fi
 # <role rolename="manager-gui"/>
 # <role rolename="manager-script"/>
 # <user username="admin" password="password" roles="manager-gui, manager-script"/>
 
 
 # Goes into pom.xml
-sed -i '/<version>/i  <packaging>war<\/packaging>' ~/iTrust2-v10/iTrust2/pom.xml
+# sed -i '/<version>/i  <packaging>war<\/packaging>' ~/iTrust2-v10/iTrust2/pom.xml
 # <plugin>
 #     <groupId>org.apache.tomcat.maven</groupId>
 #     <artifactId>tomcat7-maven-plugin</artifactId>
@@ -73,25 +78,25 @@ sed -i '/<version>/i  <packaging>war<\/packaging>' ~/iTrust2-v10/iTrust2/pom.xml
 
 # Comment lines in these two places
 # sudo nano /opt/tomcat/webapps/manager/META-INF/context.xml
-sed -ie '/<Valve/i <!--' /opt/tomcat/webapps/manager/META-INF/context.xml
-sed -ie '/<Manager/i -->' /opt/tomcat/webapps/manager/META-INF/context.xml
-# sudo nano /opt/tomcat/webapps/host-manager/META-INF/context.xml
-sed -ie '/<Valve/i <!--' /opt/tomcat/webapps/host-manager/META-INF/context.xml
-sed -ie '/<Manager/i -->' /opt/tomcat/webapps/host-manager/META-INF/context.xml
-sudo systemctl restart tomcat
+# sed -ie '/<Valve/i <!--' /opt/tomcat/webapps/manager/META-INF/context.xml
+# sed -ie '/<Manager/i -->' /opt/tomcat/webapps/manager/META-INF/context.xml
+# # sudo nano /opt/tomcat/webapps/host-manager/META-INF/context.xml
+# sed -ie '/<Valve/i <!--' /opt/tomcat/webapps/host-manager/META-INF/context.xml
+# sed -ie '/<Manager/i -->' /opt/tomcat/webapps/host-manager/META-INF/context.xml
+# sudo systemctl restart tomcat
 
 
-sed -ie '/@Bean/i \\t @Override \
-\t protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) { \
-\t \treturn builder.sources(StartWebApplication.class); \
-\t }' iTrust2-v10/iTrust2/src/main/java/edu/ncsu/csc/iTrust2/ITrust2Application.java
+# sed -ie '/@Bean/i \\t @Override \
+# \t protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) { \
+# \t \treturn builder.sources(StartWebApplication.class); \
+# \t }' iTrust2-v10/iTrust2/src/main/java/edu/ncsu/csc/iTrust2/ITrust2Application.java
 
 
-# https://mkyong.com/spring-boot/spring-boot-deploy-war-file-to-tomcat/
-# Inside the main class
-sed -i 's/@SpringBootApplication ( scanBasePackages = { "edu.ncsu.csc.iTrust2" } )/@SpringBootApplication extends SpringBootServletInitializer( scanBasePackages = { "edu.ncsu.csc.iTrust2" } )/' iTrust2-v10/iTrust2/src/main/java/edu/ncsu/csc/iTrust2/ITrust2Application.java
+# # https://mkyong.com/spring-boot/spring-boot-deploy-war-file-to-tomcat/
+# # Inside the main class
+# sed -i 's/@SpringBootApplication ( scanBasePackages = { "edu.ncsu.csc.iTrust2" } )/@SpringBootApplication extends SpringBootServletInitializer( scanBasePackages = { "edu.ncsu.csc.iTrust2" } )/' iTrust2-v10/iTrust2/src/main/java/edu/ncsu/csc/iTrust2/ITrust2Application.java
 
 
-sed -ie '/<groupId>edu.ncsu.csc<\/groupId>/a \\t<packaging>war</packaging>' iTrust2-v10/iTrust2/pom.xml
+# sed -ie '/<groupId>edu.ncsu.csc<\/groupId>/a \\t<packaging>war</packaging>' iTrust2-v10/iTrust2/pom.xml
 
-sed '/<build> \\n \t \t <plugins>/a Hello World' iTrust2-v10/iTrust2/pom.xml
+# sed '/<build> \\n \t \t <plugins>/a Hello World' iTrust2-v10/iTrust2/pom.xml

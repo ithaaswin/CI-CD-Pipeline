@@ -11,6 +11,5 @@ exports.builder = yargs => {
 
 exports.handler = async argv => {
     const { processor, jobName, buildFile } = argv;
-    await builder.build_job("deploy", processor, jobName, buildFile);
-    await 
+    await deployer.deployJob(processor, jobName, buildFile);
 };
