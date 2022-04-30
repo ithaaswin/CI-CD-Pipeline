@@ -37,11 +37,9 @@ const path = require("path")
 
 const getAllFiles = function(dirPath, arrayOfFiles) {
   files = fs.readdirSync(dirPath)
-
   arrayOfFiles = arrayOfFiles || []
 
   files.forEach(function(file) {
-    // console.log(file)
     if (fs.statSync(dirPath + "/" + file).isDirectory()) {
       arrayOfFiles = getAllFiles(dirPath + "/" + file, arrayOfFiles)
     } else {
@@ -49,33 +47,49 @@ const getAllFiles = function(dirPath, arrayOfFiles) {
     }
     
   })
-  
   finalJs = []
-
   arrayOfFiles.forEach(function(eachFile){
-    if(eachFile.split('.')[1] == 'js'){
-        finalJs.push(eachFile)
+    if(eachFile.split('.')[2] == 'js'){
+      finalJs.push(eachFile)
     }
-
   })
   
   return finalJs
 }
-console.log()
-all_javascript_files = getAllFiles('C:/Users/haris/Desktop/DEVOPS-14/', [])
-console.log(all_javascript_files)
+
+all_javascript_files = getAllFiles('/home/vagrant/checkbox.io-micro-preview/', [])
+var ignore_files_list = ['index.js', 'node_modules']
+all_javascript_files_new = []
 
 
-var ignore_files_list = fs.readFileSync('C:/Users/haris/Desktop/files_ignore.txt').toString().split("\n");
-for(i in ignore_files_list) {
-    console.log(ignore_files_list[i]);
+for(let i=0; i < all_javascript_files.length; i++){
+  temp_file = all_javascript_files[i].split('/')
+  flag = true
+  for(let j=0; j < ignore_files_list.length; j++){
+    
+    if(temp_file.includes(ignore_files_list[j])){
+      
+      flag = false
+      break
+    }
+  }
+  if(flag == true){
+    if(! all_javascript_files_new.includes(temp_file)){
+      all_javascript_files_new.push(temp_file)
+    }
+  } 
 }
 
-diff = all_javascript_files.filter(x => !ignore_files_list.includes(x) );
 
-console.log('diff', diff);
-
-
-const randomElement = all_javascript_files[Math.floor(Math.random() * all_javascript_files.length)];
-
-console.log(randomElement)
+const randomElement = all_javascript_files_new[Math.floor(Math.random() * all_javascript_files_new.length)];
+random_file_name = ''
+for(let i = 4; i<randomElement.length; i++){
+  random_file_name += randomElement[i]
+  let random_file_name_length = randomElement.length
+  if(! (i==random_file_name_length-1)){
+    random_file_name += '/'
+  }else{
+    continue
+  }
+}
+console.log(random_file_name)

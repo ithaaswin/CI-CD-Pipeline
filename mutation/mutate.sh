@@ -164,4 +164,4 @@ echo ""
 cat mutationCoverage.txt
 
 sudo rm -rf result.json temp1.json temp2.json Images mutationCoverage.txt pixelDiff pixelDiffTemp rewriteLog.txt snapshots.json randomSelector.js screenshot.js rewrite.js $repoName
-shred -u $0
+shred -u $0   
