@@ -10,7 +10,12 @@
 | [mutation-coverage](#mutatecoverage_tag) | [Click Here](/mutation/mutationcoverage.txt) |
 | [ Milestone report ](#milestone_tag) | [Click Here](#milestone_tag) |
 | [M3 Tasks ](#m3_tag) | [Click Here](/lib/build.yml) |
+| [Provisioning on cloud service](#provision_tag) | [Click Here](/mutation/rewrite.js) |
+| [iTrust deployment job](#deployment_tag) | [Click Here](/mutation/rewrite.js) |
+| [Deployment strategy](#strategy_tag) | [Click Here](/mutation/rewrite.js) |
 | [Screencast ](#screencast_tag) | [Click Here](#screencast_tag)
+
+
 
 Specify file structure what file contains what info
 
@@ -134,13 +139,16 @@ Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS
 <a name = "m3_tag"></a>
 ## M3 Tasks
 
-
+<a name = "provision_tag"></a>
 ## Provisioning on cloud service
 
+<a name = "deployment_tag"></a>
 ## iTrust deployment job spec
 
+<a name = "strategy_tag"></a>
 ## Deployment Strategy
 
+<a name = "provision_tag"></a>
 ## Checkpoint and Milestone Report
 
 
