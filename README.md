@@ -55,6 +55,8 @@ db_pass = 12345                     # set the password of mysql
 # Add the following for Windows and MAC Intel
 ip_address = 192.168.52.100         # Any ip can be assigned
 memory = 4096                       # RAM to be assigned for vm --Recommended to use atleast 4GB
+droplet_name = Name_Of_DropLet
+DROPLET_TOKEN = Token_From_DigitalOcean
 # Please make sure no comment lines are in .env file
 ```
 <a name = "m1_tag"></a>
