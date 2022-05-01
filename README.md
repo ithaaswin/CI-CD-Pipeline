@@ -143,7 +143,7 @@ Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS
 
 <a name = "provision_tag"></a>
 ## Provisioning on cloud service
-# The [droplet.js](/lib/droplet.js) file is used to provision the instance for a target infrastructure using Digital Ocean as cloud provider. 
+* The [droplet.js](/lib/droplet.js) file is used to provision the instance for a target infrastructure using Digital Ocean as cloud provider. 
 
 
 ```bash
