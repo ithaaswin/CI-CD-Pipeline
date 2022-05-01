@@ -4,12 +4,12 @@
 | [env file](#env_file) |[Click Here](#env_file) |
 | [M1 fixes](#m1_tag) | [Click Here](/lib/build.yml) |
 | [M2 Tasks ](#m2_tag) | [Click Here](/lib/build.yml) |
-| [M3 Tasks ](#m3_tag) | [Click Here](/lib/build.yml) |
 | [Mutate Operators](#mutate_tag) | [Click Here](/mutation/rewrite.js) |
 | [Test harness](#harness_tag) | [Click Here](/mutation/mutate.sh) |
 | [Snapshot oracle and differencing](#diff_tag) | [Click Here](/mutation/mutate.sh) |
 | [mutation-coverage](#mutatecoverage_tag) | [Click Here](/mutation/mutationcoverage.txt) |
 | [ Milestone report ](#milestone_tag) | [Click Here](#milestone_tag) |
+| [M3 Tasks ](#m3_tag) | [Click Here](/lib/build.yml) |
 | [Screencast ](#screencast_tag) | [Click Here](#screencast_tag)
 
 Specify file structure what file contains what info
@@ -131,7 +131,7 @@ Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS
 
 
 
-
+<a name = "m2_tag"></a>
 ## M3 Tasks
 
 
