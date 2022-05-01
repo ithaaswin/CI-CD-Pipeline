@@ -9,7 +9,13 @@
 | [Snapshot oracle and differencing](#diff_tag) | [Click Here](/mutation/mutate.sh) |
 | [mutation-coverage](#mutatecoverage_tag) | [Click Here](/mutation/mutationcoverage.txt) |
 | [ Milestone report ](#milestone_tag) | [Click Here](#milestone_tag) |
+| [M3 Tasks ](#m3_tag) | [Click Here](/lib/build.yml) |
+| [Provisioning on cloud service](#provision_tag) | [Click Here](/mutation/rewrite.js) |
+| [iTrust deployment job](#deployment_tag) | [Click Here](/mutation/rewrite.js) |
+| [Deployment strategy](#strategy_tag) | [Click Here](/mutation/rewrite.js) |
 | [Screencast ](#screencast_tag) | [Click Here](#screencast_tag)
+
+
 
 Specify file structure what file contains what info
 
@@ -127,6 +133,24 @@ Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS
 * Pug error was one of the very common errors faced due to the mismatch of directories that was happening due to the reason stated above.
 * Admin previleges for many commands was asked and this was giving errors even to create a file. Fixed this by running bash script as a sudo.
 * The if else function was a very tricky one. We had to understand the esprima parsing very precisely. Finally were able to achieve the exact function we expected.
+
+
+
+<a name = "m3_tag"></a>
+## M3 Tasks
+
+<a name = "provision_tag"></a>
+## Provisioning on cloud service
+
+<a name = "deployment_tag"></a>
+## iTrust deployment job spec
+
+<a name = "strategy_tag"></a>
+## Deployment Strategy
+
+<a name = "provision_tag"></a>
+## Checkpoint and Milestone Report
+
 
 
 <a name = "screencast_tag"></a>
