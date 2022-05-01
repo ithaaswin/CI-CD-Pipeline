@@ -4,6 +4,7 @@
 | [env file](#env_file) |[Click Here](#env_file) |
 | [M1 fixes](#m1_tag) | [Click Here](/lib/build.yml) |
 | [M2 Tasks ](#m2_tag) | [Click Here](/lib/build.yml) |
+| [M3 Tasks ](#m3_tag) | [Click Here](/lib/build.yml) |
 | [Mutate Operators](#mutate_tag) | [Click Here](/mutation/rewrite.js) |
 | [Test harness](#harness_tag) | [Click Here](/mutation/mutate.sh) |
 | [Snapshot oracle and differencing](#diff_tag) | [Click Here](/mutation/mutate.sh) |
@@ -127,6 +128,21 @@ Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS
 * Pug error was one of the very common errors faced due to the mismatch of directories that was happening due to the reason stated above.
 * Admin previleges for many commands was asked and this was giving errors even to create a file. Fixed this by running bash script as a sudo.
 * The if else function was a very tricky one. We had to understand the esprima parsing very precisely. Finally were able to achieve the exact function we expected.
+
+
+
+
+## M3 Tasks
+
+
+## Provisioning on cloud service
+
+## iTrust deployment job spec
+
+## Deployment Strategy
+
+## Checkpoint and Milestone Report
+
 
 
 <a name = "screencast_tag"></a>
