@@ -147,6 +147,10 @@ Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS
 <a name = "deployment_tag"></a>
 ## iTrust deployment job spec
 
+```bash
+pipeline build deploy inventory itrust-deploy build.yml
+```
+
 <a name = "strategy_tag"></a>
 ## Deployment Strategy
 
