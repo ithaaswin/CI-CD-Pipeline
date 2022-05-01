@@ -154,7 +154,8 @@ pipeline prod up
 <a name = "deployment_tag"></a>
 ## iTrust deployment job spec
 
-* The [build.yml](/yaml/build.yml)
+* The [build.yml](/yaml/build.yml) has the job - itrust-deploy which is responisble to create a war file for deploying the iTrust application to the cloud instance.
+* Once, the war file is generated after succesful build and been located, the dependencies such as JRE, JDK, Maven, Apache, npm, mysql are installed and the respective commands are defined in the [build.yml](/yaml/build.yml) file.
 
 ```bash
 pipeline build deploy inventory itrust-deploy build.yml
