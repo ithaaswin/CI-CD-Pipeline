@@ -144,6 +144,10 @@ Our Task Board can be found [here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS
 <a name = "provision_tag"></a>
 ## Provisioning on cloud service
 
+```bash
+pipeline prod up
+```
+
 <a name = "deployment_tag"></a>
 ## iTrust deployment job spec
 
