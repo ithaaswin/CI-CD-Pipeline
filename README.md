@@ -154,6 +154,8 @@ pipeline prod up
 <a name = "deployment_tag"></a>
 ## iTrust deployment job spec
 
+* The [build.yml](/yaml/build.yml)
+
 ```bash
 pipeline build deploy inventory itrust-deploy build.yml
 ```
