@@ -5,7 +5,7 @@
 | [M3 Tasks ](#m3_tag) | [Click Here](/lib/build.yml) |
 | [Provisioning on cloud service](#provision_tag) | [Click Here](/lib/droplet.js) |
 | [iTrust deployment job](#deployment_tag) | [Click Here](/lib/deployer.js) |
-| [Deployment strategy](#strategy_tag) | [Click Here](/lib/deployer.js) |
+| [Deployment strategy](#strategy_tag) | [Click Here](/lib/serve.js) |
 | [Challenges faced](#challenges_tag) | [Click Here](#challenges_tag) |
 | [Screencast ](#screencast_tag) | [Click Here](#screencast_tag)
 
@@ -80,6 +80,8 @@ pipeline build deploy inventory itrust-deploy build.yml
 
 <a name = "strategy_tag"></a>
 ## Deployment Strategy
+*   We implemented the blue green deployment strategy along with healthcheck function to keep track of health of the target.
+*   For this purpose our droplets droplet-blue and droplet-green contains the application and monitor droplets runs the traffic and also checks the health of the target
 *  we monitor the health check and start the proxy to listen on 3590 port, this will be done by monitor droplet another cloud instance.
 *  we start checking the health of the target which is by default assigned to Green, and at some point of time we execute siege script to stress test the target droplet due to which the the droplet hangs for a while, which results in failover and switches to blue droplet.
 *  We monitor this inside the third droplet "monitor" the code can be found at [serve.js](/lib/serve.js)
