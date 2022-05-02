@@ -52,6 +52,7 @@ jobs:
   - name: itrust-deploy
     warFileLoc: iTrust2-v10/iTrust2/target/iTrust2-10.war
     homePage: iTrust2-10/login
+    port: 8080
     steps: 
       - name: install JRE
         run: sudo apt-get install default-jre -y

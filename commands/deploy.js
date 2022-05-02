@@ -13,8 +13,10 @@ exports.builder = yargs => {
 
 exports.handler = async argv => {
     const { processor, jobName, buildFile } = argv;
-    await deployer.deployJob(processor, jobName, buildFile);
-    console.log(chalk.cyan(homePage));
-     await monitor.init(processor);
-     await monitor.Monitordroplet(processor)
+    var info=[];
+    info=await deployer.deployJob(processor, jobName, buildFile);
+    console.log(chalk.cyan(info[0]));
+    console.log(chalk.cyan(info[1]));
+    await monitor.init(processor);
+    await monitor.Monitordroplet(processor, info[0], info[1])
 };
