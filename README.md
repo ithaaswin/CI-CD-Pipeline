@@ -97,7 +97,7 @@ pipeline build deploy inventory itrust-deploy build.yml
 ## Screencast 
 [Click Here](https://youtu.be/OJvqAtbRG1A) for Screencast of MAC M1
 
-Use this if the above is not working - https://youtu.be/KBT1o8fCUys
+Use this if the above is not working - https://youtu.be/OJvqAtbRG1A
 
 [Click Here](https://youtu.be/SrHMuLjhWHM) for Screencast of Windows
 <br>
