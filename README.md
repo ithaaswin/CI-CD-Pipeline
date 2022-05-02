@@ -81,7 +81,8 @@ pipeline build deploy inventory itrust-deploy build.yml
 <a name = "strategy_tag"></a>
 ## Deployment Strategy
 *   We implemented the blue green deployment strategy along with healthcheck function to keep track of health of the target.
-*   For this purpose our droplets droplet-blue and droplet-green contains the application and monitor droplets runs the traffic and also checks the health of the target
+*   For this purpose our droplets droplet-blue and droplet-green contains the application which is the .war file genereate by execution of the itrust-build, which will be copied to destination droplets and also installs tomcat and restartss the tomcat server on target machines.
+*   The monitor droplets runs the traffic and also checks the health of the target using the serve.js
 *  we monitor the health check and start the proxy to listen on 3590 port, this will be done by monitor droplet another cloud instance.
 *  we start checking the health of the target which is by default assigned to Green, and at some point of time we execute siege script to stress test the target droplet due to which the the droplet hangs for a while, which results in failover and switches to blue droplet.
 *  We monitor this inside the third droplet "monitor" the code can be found at [serve.js](/lib/serve.js)
