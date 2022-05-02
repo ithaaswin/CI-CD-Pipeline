@@ -1,0 +1,41 @@
+setup:
+  - sudo apt-get -qqq -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update
+  - sudo apt-get -qqq update -y
+  - sudo apt-get -qqq install -y git nodejs npm chromium-browser
+
+jobs:
+  - name: angular-build
+    steps:
+      - name: Delete old Angular
+        run: rm -rf angular-app
+      - name: Clone the Repository
+        run: git clone --recursive https://github.com/ganatan/angular-app.git
+      - name: Install npm dependencies
+        run: cd ~/angular-app/frontend && npm i
+      - name: Install angular
+        run: cd ~/angular-app/frontend && sudo npm install -g @angular/cli
+      - name: Copy patch
+        run: sudo cp -rp {{shared_path}}/patch/Angular.patch ~/angular-app
+      - name: Adding Patch for Headless Chrome
+        run: cd ~/angular-app && git apply --ignore-space-change --ignore-whitespace --ignore-space-change Angular.patch
+
+  - name: angular-test
+    steps:
+    - name: Run the Test cases
+      run: export CHROME_BIN=/usr/bin/chromium-browser && cd ~/angular-app/frontend && ng build && ng test | tee testLogger.txt
+    - name: Check if build passed
+      run: cd ~/angular-app/frontend && grep "'"TOTAL"'" testLogger.txt | grep -v "'"TOTAL"'" && echo "'"Build Failed"'"
+    - name: Check build status
+      run: cd ~/angular-app/frontend && grep "'"TOTAL"'" testLogger.txt | grep "FAILURE" && echo "'"Tests Failed. Cannot create bundle"'"
+    - name: Bundle for deploy
+      run: export CHROME_BIN=/usr/bin/chromium-browser && cd ~/angular-app/frontend && grep "'"TOTAL"'" testLogger.txt | grep "'"SUCCESS"'" && ng build --prod
+    
+  - name: angular-deploy
+    homePage: ""
+    sourceFileLoc: angular-app/frontend/dist/angular-starter/browser/*
+    deployFileLoc: /var/www/html/
+    server: nginx
+    port: 80
+    steps:
+      - name: Install nodejs
+        run: sudo apt-get install -y nodejs
