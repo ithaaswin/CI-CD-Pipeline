@@ -45,12 +45,12 @@ Npm
 vm_name = Name_Of_VM                # Ex: vm-server
 git_token = Git_Token               # Ex: 123adsfh32jjhg
 db_pass = 12345                     # set the password of mysql 
+droplet_name=drops                  # name for the SSH KEY to be placed inside the digital ocean
+DROPLET_TOKEN=dp_ac8be7da.......es  # droplet token genereated from digital ocean 
 
 # Add the following for Windows and MAC Intel
 ip_address = 192.168.52.100         # Any ip can be assigned
 memory = 4096                       # RAM to be assigned for vm --Recommended to use atleast 4GB
-droplet_name = Name_Of_DropLet
-DROPLET_TOKEN = Token_From_DigitalOcean
 # Please make sure no comment lines are in .env file
 ```
 <a name = "m3_tag"></a>
@@ -89,9 +89,6 @@ pipeline build deploy inventory itrust-deploy build.yml
 * It was a challenging task to  download tomcat inside the droplets and aslo to copy the war file generated from vm into the droplets
 * We faced issues  due to automating the blue green server ips as serve.js and seige.sh will be executed inside the monitor droplet, which took some time to automate the code so that they can fetch those values.
 * We faced issues with dos2unix for(CRLF error), we fixed this issue by finding.sh files and usage of dos2unix package downloaded.
-*
-
-
 
 <a name = "screencast_tag"></a>
 ## Screencast 
