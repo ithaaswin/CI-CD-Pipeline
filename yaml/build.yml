@@ -1,7 +1,7 @@
 setup:
   - sudo apt-get -qqq -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update
   - sudo apt-get -qqq update -y
-  - sudo apt-get -qqq install git wget -y
+  - sudo apt-get -qqq install -y git wget dos2unix
   - sudo DEBIAN_FRONTEND=noninteractive apt-get -qqq install -y debconf-utils
   - sudo debconf-set-selections <<< "'"debconf debconf/frontend select Noninteractive"'"
   - sudo debconf-set-selections <<< "'"mysql-server mysql-server/root_password password {{mysql_pass}}"'"
@@ -31,9 +31,9 @@ jobs:
       - name: set password in application.yml
         run: sed -i "'"s/password\:/password\:\ {{mysql_pass}}/g"'" iTrust2-v10/iTrust2/src/main/resources/application.yml
       - name: copy patch
-        run: sudo cp -rp {{shared_path}}/patch/* ~/iTrust2-v10
+        run: sudo cp -rp {{shared_path}}/patch/Itrust.patch ~/iTrust2-v10
       - name: fix patch
-        run: cd ~/iTrust2-v10 && git apply ITrust2Application.patch pom.patch
+        run: cd ~/iTrust2-v10 && git apply Itrust.patch
       - name: test iTrust1
         run: mvn -f iTrust2-v10/iTrust2 --batch-mode --update-snapshots clean test
       - name: create war file
@@ -50,8 +50,10 @@ jobs:
        - http://localhost:3000/survey/variations.md
 
   - name: itrust-deploy
-    warFileLoc: iTrust2-v10/iTrust2/target/iTrust2-10.war
     homePage: iTrust2-10/login
+    sourceFileLoc: iTrust2-v10/iTrust2/target/iTrust2-10.war
+    deployFileLoc: /opt/tomcat/webapps
+    server: tomcat
     port: 8080
     steps: 
       - name: install JRE
