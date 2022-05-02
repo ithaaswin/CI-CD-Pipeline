@@ -3,9 +3,9 @@
 | ----- | ----- |
 | [env file](#env_file) |[Click Here](#env_file) |
 | [M3 Tasks ](#m3_tag) | [Click Here](/lib/build.yml) |
-| [Provisioning on cloud service](#provision_tag) | [Click Here](/mutation/rewrite.js) |
-| [iTrust deployment job](#deployment_tag) | [Click Here](/mutation/rewrite.js) |
-| [Deployment strategy](#strategy_tag) | [Click Here](/mutation/rewrite.js) |
+| [Provisioning on cloud service](#provision_tag) | [Click Here](/lib/droplet.js) |
+| [iTrust deployment job](#deployment_tag) | [Click Here](/lib/deployer.js) |
+| [Deployment strategy](#strategy_tag) | [Click Here](/lib/deployer.js) |
 | [Challenges faced](#challenges_tag) | [Click Here](#challenges_tag) |
 | [Screencast ](#screencast_tag) | [Click Here](#screencast_tag)
 
@@ -82,9 +82,14 @@ pipeline build deploy inventory itrust-deploy build.yml
 ## Deployment Strategy
 *  we monitor the health check and start the proxy to listen on 3590 port, this will be done by monitor droplet another cloud instance.
 *  we start checking the health of the target which is by default assigned to Green, and at some point of time we execute siege script to stress test the target droplet due to which the the droplet hangs for a while, which results in failover and switches to blue droplet.
-*  We monitor this inside the third droplet "monitor"
+*  We monitor this inside the third droplet "monitor" the code can be found at [serve.js](/lib/serve.js)
 <a name = "challenges_tag"></a>
 ## Challenges and issues faced
+* we did research a lot to create the droplet using the SSH key generated and then used axios.post to create the droplet using the fingerprint returned by the digital ocean.
+* It was a challenging task to  download tomcat inside the droplets and aslo to copy the war file generated from vm into the droplets
+* We faced issues  due to automating the blue green server ips as serve.js and seige.sh will be executed inside the monitor droplet, which took some time to automate the code so that they can fetch those values.
+* We faced issues with dos2unix for(CRLF error), we fixed this issue by finding.sh files and usage of dos2unix package downloaded.
+*
 
 
 
