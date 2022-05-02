@@ -2,7 +2,7 @@
 | Readme Loc | Git Link |
 | ----- | ----- |
 | [env file](#env_file) |[Click Here](#env_file) |
-| [M3 Tasks ](#m3_tag) | [Click Here](/lib/build.yml) |
+| [M3 Tasks ](#m3_tag) | [Click Here](scripts/build.yml) |
 | [Provisioning on cloud service](#provision_tag) | [Click Here](/lib/droplet.js) |
 | [iTrust deployment job](#deployment_tag) | [Click Here](/lib/deployer.js) |
 | [Deployment strategy](#strategy_tag) | [Click Here](/lib/serve.js) |
