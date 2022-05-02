@@ -2,7 +2,8 @@ const chalk = require('chalk');
 exports.command = 'deploy inventory <jobName> <buildFile>';
 exports.desc = 'Deploys the job into cloud';
 const deployer = require("../lib/deployer.js");
-const serve = require("../lib/serve.js");
+const monitor = require('../lib/monitor.js');
+// const serve = require("../lib/serve.js");
 
 
 exports.builder = yargs => {
@@ -12,9 +13,8 @@ exports.builder = yargs => {
 
 exports.handler = async argv => {
     const { processor, jobName, buildFile } = argv;
-    var homePage = await deployer.deployJob(processor, jobName, buildFile);
+    await deployer.deployJob(processor, jobName, buildFile);
     console.log(chalk.cyan(homePage));
-    await serve.loadProxy(processor, homePage);
-    console.log(chalk.red("**********************************************************************************************************"));
-    await serve.run();
+     await monitor.init(processor);
+     await monitor.Monitordroplet(processor)
 };

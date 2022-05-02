@@ -18,6 +18,7 @@ exports.handler = async argv => {
         await createVM.mac();
     } 
     else {
+        console.log(processor)
         await createVM.windows(vm_name);   
     }
 };
