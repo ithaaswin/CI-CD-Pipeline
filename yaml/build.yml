@@ -52,7 +52,7 @@ jobs:
   - name: itrust-deploy
     homePage: iTrust2-10/login
     sourceFileLoc: iTrust2-v10/iTrust2/target/iTrust2-10.war
-    deployFileLoc: /opt/tomcat/webapps
+    deployFileLoc: /opt/tomcat/webapps/
     server: tomcat
     port: 8080
     steps: 

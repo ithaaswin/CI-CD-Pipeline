@@ -63,33 +63,3 @@ sed -ie '/<Valve/i <!--' /opt/tomcat/webapps/host-manager/META-INF/context.xml
 sed -ie '/<Manager/i -->' /opt/tomcat/webapps/host-manager/META-INF/context.xml
 sudo systemctl restart tomcat
 fi
-
-
-# Goes into pom.xml
-# sed -i '/<version>/i  <packaging>war<\/packaging>' ~/iTrust2-v10/iTrust2/pom.xml
-# <plugin>
-#     <groupId>org.apache.tomcat.maven</groupId>
-#     <artifactId>tomcat7-maven-plugin</artifactId>
-#     <version>2.2</version>
-#     <configuration>
-#         <url>http://localhost:8080/iTrust2</url>
-#         <server>TomcatServer</server>
-#         <path>/myapp</path>
-#     </configuration>
-# </plugin>
-
-
-# sed -ie '/@Bean/i \\t @Override \
-# \t protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) { \
-# \t \treturn builder.sources(StartWebApplication.class); \
-# \t }' iTrust2-v10/iTrust2/src/main/java/edu/ncsu/csc/iTrust2/ITrust2Application.java
-
-
-# # https://mkyong.com/spring-boot/spring-boot-deploy-war-file-to-tomcat/
-# # Inside the main class
-# sed -i 's/@SpringBootApplication ( scanBasePackages = { "edu.ncsu.csc.iTrust2" } )/@SpringBootApplication extends SpringBootServletInitializer( scanBasePackages = { "edu.ncsu.csc.iTrust2" } )/' iTrust2-v10/iTrust2/src/main/java/edu/ncsu/csc/iTrust2/ITrust2Application.java
-
-
-# sed -ie '/<groupId>edu.ncsu.csc<\/groupId>/a \\t<packaging>war</packaging>' iTrust2-v10/iTrust2/pom.xml
-
-# sed '/<build> \\n \t \t <plugins>/a Hello World' iTrust2-v10/iTrust2/pom.xml
