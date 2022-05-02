@@ -27,7 +27,7 @@ function rewrite( filepath, newPath) {
 
 
 function ConditionalBoundary(ast){
-    var conditions = {0:[">",">="],1:["<","<="]};
+    var conditions = {0:[">",">="],1:["<","<="],2:[">=",">"],3:["<=","<"]};
     var randomCondition = getRandomInt(Object.keys(conditions).length);
     ExpressionMutations(ast,"BinaryExpression",conditions[randomCondition][0],conditions[randomCondition][1]);
 }
@@ -65,7 +65,7 @@ function IncrementalMutations(ast){
 
 
 function NegateConditionals(ast){
-    var conditions = {0:["==","!="],1:[">","<"]};
+    var conditions = {0:["==","!="],1:[">","<"],2:["!=","=="],3:["<",">"]};
     var randomCondition = getRandomInt(Object.keys(conditions).length);
     ExpressionMutations(ast,"BinaryExpression",conditions[randomCondition][0],conditions[randomCondition][1]);
 }
