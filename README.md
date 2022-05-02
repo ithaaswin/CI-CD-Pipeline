@@ -99,6 +99,6 @@ pipeline build deploy inventory itrust-deploy build.yml
 
 Use this if the above is not working - https://youtu.be/OJvqAtbRG1A
 
-[Click Here](https://youtu.be/SrHMuLjhWHM) for Screencast of Windows
+[Click Here](https://youtu.be/dHr_4H2M6yM) for Screencast of Windows
 <br>
-Link to Screencast for Windows (If above hyperlink is not working) - https://youtu.be/SrHMuLjhWHM
+Link to Screencast for Windows (If above hyperlink is not working) - https://youtu.be/dHr_4H2M6yM
