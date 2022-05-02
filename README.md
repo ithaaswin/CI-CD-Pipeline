@@ -54,10 +54,11 @@ DROPLET_TOKEN = Token_From_DigitalOcean
 ```
 <a name = "m3_tag"></a>
 ## M3 Tasks
-
 <a name = "provision_tag"></a>
 ## Provisioning on cloud service
 * The [droplet.js](/lib/droplet.js) file is used to provision the instance for a target infrastructure using Digital Ocean as cloud provider. 
+* We are creating droplets with the help of ssh key generated.
+* We are using 3 droplets namely  droplet-blue, droplet-green to deploy the applictaion and monitor droplet to act as proxy server to monitor the health of the application.
 * After creation of droplet in the Digital Ocean webiste, the infrastructure data such as droplet name, droplet id, ip address is stored in an inventory file.
 
 
@@ -68,8 +69,9 @@ pipeline prod up
 <a name = "deployment_tag"></a>
 ## iTrust deployment job spec
 
-* The [build.yml](/yaml/build.yml) has the job - itrust-deploy which is responisble to create a war file for deploying the iTrust application to the cloud instance.
-* Once, the war file is generated after succesful build and been located, the dependencies such as JRE, JDK, Maven, Apache, npm, mysql are installed and the respective commands are defined in the [build.yml](/yaml/build.yml) file.
+* The [build.yml](/yaml/build.yml) has the job - itrust-build which is responisble to create a war file for deploying the iTrust application to the cloud instances of blue and green.
+* We also install npm module and node js in monitor droplet and copy the required scripts into monitor droplet.
+* Once, the war file is generated after succesful build and been located, the dependencies such as tomcat JRE, JDK, Maven, Apache, npm, mysql are installed and the respective commands are defined in the [build.yml](/yaml/build.yml) file. And the war is copied to the cloud instances blue and green droplets.
 
 ```bash
 pipeline build deploy inventory itrust-deploy build.yml
@@ -77,7 +79,9 @@ pipeline build deploy inventory itrust-deploy build.yml
 
 <a name = "strategy_tag"></a>
 ## Deployment Strategy
-
+*  we monitor the health check and start the proxy to listen on 3590 port, this will be done by monitor droplet another cloud instance.
+*  we start checking the health of the target which is by default assigned to Green, and at some point of time we execute siege script to stress test the target droplet due to which the the droplet hangs for a while, which results in failover and switches to blue droplet.
+*  We monitor this inside the third droplet "monitor"
 <a name = "provision_tag"></a>
 ## Checkpoint and Milestone Report
 
