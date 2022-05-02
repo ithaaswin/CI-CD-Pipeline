@@ -95,7 +95,7 @@ pipeline build deploy inventory itrust-deploy build.yml
 
 <a name = "screencast_tag"></a>
 ## Screencast 
-[Click Here](https://youtu.be/KBT1o8fCUys) for Screencast of MAC M1
+[Click Here](https://youtu.be/OJvqAtbRG1A) for Screencast of MAC M1
 
 Use this if the above is not working - https://youtu.be/KBT1o8fCUys
 
