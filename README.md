@@ -47,7 +47,7 @@ git_token = Git_Token               # Ex: 123adsfh32jjhg
 db_pass = 12345                     # set the password of mysql 
 droplet_name=drops                  # name for the SSH KEY to be placed inside the digital ocean
 DROPLET_TOKEN=dp_ac8be7da.......es  # droplet token genereated from digital ocean 
-
+# to generate the droplet token login into digital ocean account and select API from the left menu and then select Generate new token and copy it to above
 # Add the following for Windows and MAC Intel
 ip_address = 192.168.52.100         # Any ip can be assigned
 memory = 4096                       # RAM to be assigned for vm --Recommended to use atleast 4GB
