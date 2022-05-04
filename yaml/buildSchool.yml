@@ -41,7 +41,7 @@ jobs:
     
   - name: school-deploy
     homePage: ""
-    sourceFileLoc: Angular-School-Management-System/dist/FsmsApp/
+    sourceFileLoc: Angular-School-Management-System/dist/FsmsApp/*
     deployFileLoc: /var/www/html/
     server: nginx
     port: 80

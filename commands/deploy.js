@@ -15,5 +15,5 @@ exports.handler = async argv => {
     const { processor, jobName, buildFile } = argv;
     var info=[];
     info=await deployer.deployJob(processor, jobName, buildFile);
-    await monitor.dropletMonitor(processor, info[0], info[1]);
+    // await monitor.dropletMonitor(processor, info[0], info[1]);
 };
