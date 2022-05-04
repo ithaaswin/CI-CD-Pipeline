@@ -1,0 +1,50 @@
+setup:
+  - sudo apt-get -qqq -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update
+  - sudo apt-get -qqq update -y
+  - sudo apt-get -qqq install -y git nodejs npm chromium-browser jq
+
+jobs:
+  - name: school-build
+    steps:
+      - name: Delete old School
+        run: rm -rf Angular-School-Management-System
+      - name: Clone the Repository
+        run: git clone --recursive https://github.com/OwenKelvin/Angular-School-Management-System.git
+      - name: Copy patch
+        run: sudo cp -rp {{shared_path}}/patch/School.patch ~/Angular-School-Management-System
+      - name: Adding Patch for Headless Chrome
+        run: cd ~/Angular-School-Management-System && git apply --ignore-space-change --ignore-whitespace --ignore-space-change School.patch
+      - name: Install npm dependencies
+        run: cd ~/Angular-School-Management-System && npm i
+      - name: Install School
+        run: cd ~/Angular-School-Management-System && sudo npm install -g @angular/cli
+
+  - name: school-test
+    steps:
+    - name: Run the Test cases
+      run: export CHROME_BIN=/usr/bin/chromium-browser && cd ~/Angular-School-Management-System && ng test | tee testLogger.txt
+    - name: Check if build passed
+      run: cd ~/Angular-School-Management-System && grep "'"TOTAL"'" testLogger.txt | grep -v "'"TOTAL"'" && echo "'"Build Failed"'"
+    - name: Check build status
+      run: cd ~/Angular-School-Management-System && grep "'"TOTAL"'" testLogger.txt | grep "FAILURE" && echo "'"Tests Failed. Cannot create bundle"'"
+    - name: Bundle for deploy
+      run: export CHROME_BIN=/usr/bin/chromium-browser && cd ~/Angular-School-Management-System && grep "'"TOTAL"'" testLogger.txt | grep "'"SUCCESS"'" && ng build --prod
+
+  - name: school-coverage
+    threshold: 30
+    tool: ng
+    coverageLoc: Angular-School-Management-System
+    coverageFile: coverage/FsmsApp/index.html
+    steps:
+      - name: Run the coverage
+        run: export CHROME_BIN=/usr/bin/chromium-browser && cd ~/Angular-School-Management-System && ng test --code-coverage | tee ~/coverageResult.txt
+    
+  - name: school-deploy
+    homePage: ""
+    sourceFileLoc: Angular-School-Management-System/dist/angular-starter/browser/*
+    deployFileLoc: /var/www/html/
+    server: nginx
+    port: 80
+    steps:
+      - name: Install nodejs
+        run: sudo apt-get install -y nodejs

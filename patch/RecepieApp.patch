@@ -1,5 +1,5 @@
 diff --git a/pom.xml b/pom.xml
-index b563b66..7161baf 100644
+index b563b66..2085417 100644
 --- a/pom.xml
 +++ b/pom.xml
 @@ -11,10 +11,12 @@
@@ -27,6 +27,56 @@ index b563b66..7161baf 100644
          <dependency>
              <groupId>com.h2database</groupId>
              <artifactId>h2</artifactId>
+@@ -100,6 +107,49 @@
+                     </execution>
+                 </executions>
+             </plugin>
++            <plugin>
++                <groupId>org.jacoco</groupId>
++                <artifactId>jacoco-maven-plugin</artifactId>
++                <version>0.8.2</version>
++                <executions>
++                    <execution>
++                        <goals>
++                            <goal>prepare-agent</goal>
++                        </goals>
++                    </execution>
++                    <!-- attached to Maven test phase -->
++                    <execution>
++                        <id>report</id>
++                        <phase>test</phase>
++                        <goals>
++                            <goal>report</goal>
++                        </goals>
++                    </execution>
++                    <execution>
++                        <id>jacoco-check</id>
++                        <goals>
++                            <goal>check</goal>
++                        </goals>
++                        <configuration>
++                            <rules>
++                                <rule>
++                                    <element>PACKAGE</element>
++                                    <limits>
++                                        <limit>
++                                            <counter>LINE</counter>
++                                            <value>COVEREDRATIO</value>
++                                            <minimum>THRESHOLD</minimum>
++                                        </limit>
++                                    </limits>
++                                </rule>
++                            </rules>
++                            <excludes>
++                                <exclude>com/anvesh/recepieapp/exceptions/**/*</exclude>
++                            </excludes>
++                        </configuration>
++                    </execution>
++                </executions>
++            </plugin>
+         </plugins>
+     </build>
+ 
 diff --git a/src/main/java/com/anvesh/recepieapp/RecepieAppApplication.java b/src/main/java/com/anvesh/recepieapp/RecepieAppApplication.java
 index c7a3ef3..65bd4c1 100644
 --- a/src/main/java/com/anvesh/recepieapp/RecepieAppApplication.java

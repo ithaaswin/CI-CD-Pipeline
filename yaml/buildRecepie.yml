@@ -1,7 +1,7 @@
 setup:
   - sudo apt-get -qqq -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update
   - sudo apt-get -qqq update -y
-  - sudo apt-get -qqq install git wget ssmtp -y
+  - sudo apt-get -qqq install git wget dos2unix jq -y
   - sudo DEBIAN_FRONTEND=noninteractive apt-get -qqq install -y debconf-utils
   - sudo debconf-set-selections <<< "'"debconf debconf/frontend select Noninteractive"'"
   - sudo debconf-set-selections <<< "'"mysql-server mysql-server/root_password password {{mysql_pass}}"'"
@@ -28,7 +28,6 @@ jobs:
         run: cd ~/RecepieApp && git apply --ignore-space-change --ignore-whitespace --ignore-space-change RecepieApp.patch
   
   - name: recepie-test
-    buildFileLoc: RecepieApp
     steps: 
       - name: Run the test cases
         run: mvn -f RecepieApp clean test | tee testLogger.txt
@@ -37,6 +36,19 @@ jobs:
       - name: Create WAR file
         run: grep "'"BUILD SUCCESS"'" testLogger.txt && mvn -f RecepieApp clean package
 
+  - name: recepie-coverage
+    threshold: 0.2
+    tool: jacoco
+    coverageLoc: RecepieApp
+    coverageFile: target/site/jacoco/index.html
+    steps:
+      - name: Set Threshold
+        run: sed -i "'"s/THRESHOLD/{{threshold}}/"'" ~/RecepieApp/pom.xml
+      - name: Run the coverage
+        run: mvn -f RecepieApp clean verify | tee coverageResult.txt
+      - name: Redo Threshold
+        run: sed -i "'"s/<minimum>{{threshold}}/<minimum>THRESHOLD/"'" ~/RecepieApp/pom.xml
+      
   - name: recepie-deploy
     homePage: RecepieApp-0.0.1-SNAPSHOT
     sourceFileLoc: RecepieApp/target/RecepieApp-0.0.1-SNAPSHOT.war

@@ -1,0 +1,62 @@
+diff --git a/angular.json b/angular.json
+index 15b9732..d0cf935 100644
+--- a/angular.json
++++ b/angular.json
+@@ -48,10 +48,10 @@
+               "sourceMap": false,
+               "extractCss": true,
+               "namedChunks": false,
+-              "aot": true,
++              "aot": false,
+               "extractLicenses": true,
+               "vendorChunk": false,
+-              "buildOptimizer": true,
++              "buildOptimizer": false,
+               "budgets": [
+                 {
+                   "type": "initial",
+@@ -99,7 +99,7 @@
+               "src/styles.less"
+             ],
+             "scripts": [],
+-            "codeCoverage": true
++            "codeCoverage": false
+           }
+         },
+         "lint": {
+@@ -134,4 +134,4 @@
+   "cli": {
+     "defaultCollection": "@ngrx/schematics"
+   }
+-}
+\ No newline at end of file
++}
+diff --git a/karma.conf.js b/karma.conf.js
+index 0fbc4f8..9d03417 100644
+--- a/karma.conf.js
++++ b/karma.conf.js
+@@ -31,8 +31,8 @@ module.exports = function (config) {
+     port: 9876,
+     colors: true,
+     logLevel: config.LOG_INFO,
+-    autoWatch: true,
+-    singleRun: false,
+-    restartOnFileChange: true
++    autoWatch: false,
++    singleRun: true,
++    restartOnFileChange: false
+   });
+ };
+diff --git a/src/app/app.module.ts b/src/app/app.module.ts
+index 488470c..70cbc26 100644
+--- a/src/app/app.module.ts
++++ b/src/app/app.module.ts
+@@ -8,7 +8,7 @@ import { LoginModule } from './login/login.module';
+ import { CoreModule } from './core/core.module';
+ import { SharedModule } from './shared/shared.module';
+ import { ReactiveFormsModule } from '@angular/forms';
+-import { HTTP_INTERCEPTORS } from '@angular/common/http';
++import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+ import { ErrorsModule } from './errors/errors.module';
+ import { RouterModule } from '@angular/router';
+ import { PagesModule } from './pages/pages.module';
