@@ -48,7 +48,7 @@ jobs:
         run: mvn -f RecepieApp clean verify | tee coverageResult.txt
       - name: Redo Threshold
         run: sed -i "'"s/<minimum>{{threshold}}/<minimum>THRESHOLD/"'" ~/RecepieApp/pom.xml
-      
+
   - name: recepie-deploy
     homePage: RecepieApp-0.0.1-SNAPSHOT
     sourceFileLoc: RecepieApp/target/RecepieApp-0.0.1-SNAPSHOT.war

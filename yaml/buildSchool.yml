@@ -1,7 +1,7 @@
 setup:
   - sudo apt-get -qqq -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update
   - sudo apt-get -qqq update -y
-  - sudo apt-get -qqq install -y git nodejs npm chromium-browser jq
+  - sudo apt-get -qqq install -y git nodejs npm chromium-browser dos2unix jq
 
 jobs:
   - name: school-build
@@ -41,7 +41,7 @@ jobs:
     
   - name: school-deploy
     homePage: ""
-    sourceFileLoc: Angular-School-Management-System/dist/angular-starter/browser/*
+    sourceFileLoc: Angular-School-Management-System/dist/FsmsApp/
     deployFileLoc: /var/www/html/
     server: nginx
     port: 80
