@@ -5,7 +5,7 @@
 | [Pipeline Jobs](#pipeJobs) | [Click Here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/tree/F0-aitha/lib) |
 | [New Feature](#newFeature) | [Click Here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/blob/F0-aitha/lib/codeCov.js) |
 | [Challenges faced](#challenges_tag) | [Click Here](#challenges_tag) |
-| [Screencast ](#screencast_tag) | [Click Here](#screencast_tag)
+| [Screencast ](#screencast_tag) | [Click Here](https://youtu.be/p7b0XkFlZeg)
 
 ```MAC M1 requirements```
 
@@ -44,7 +44,10 @@ To Generate mail Token use this link.
 ### Application-1
 
 Source code can be found [here](https://github.com/anvesh-lp/RecepieApp.git)
+
 It is a spring boot application
+
+Application Running can be verified at: dropletID:8080/RecepieApp-0.0.1-SNAPSHOT/
 
 ```bash
 pipeline init
@@ -57,7 +60,10 @@ pipeline deploy inventory recepie-deploy buildRecepie.yml
 ### Application-2
 
 Source code can be found [here](https://github.com/OwenKelvin/Angular-School-Management-System.git)
+
 It is an Angular Application with nodeJS
+
+Application running can be verified at: dropletID
 
 ```bash
 pipeline init
@@ -109,4 +115,4 @@ SpringBoot applications use jacoco to generate the code coverage while Angular u
 
 ## Screencast 
 
-[Click Here](https://youtu.be/OJvqAtbRG1A) for Screencast of MAC M1
+[Click Here](https://youtu.be/p7b0XkFlZeg) for Screencast of MAC M1
