@@ -1,19 +1,11 @@
-# Pipeline-Template
+# Final Project
 | Readme Loc | Git Link |
 | ----- | ----- |
-| [env file](#env_file) |[Click Here](#env_file) |
-| [M3 Tasks ](#m3_tag) | [Click Here](yaml/build.yml) |
-| [Provisioning on cloud service](#provision_tag) | [Click Here](/lib/droplet.js) |
-| [iTrust deployment job](#deployment_tag) | [Click Here](/lib/deployer.js) |
-| [Deployment strategy](#strategy_tag) | [Click Here](/lib/serve.js) |
+| [env file](#env_file) | [Click Here](#env_file) |
+| [Pipeline Jobs](#pipeJobs) | [Click Here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/tree/F0-aitha/lib) |
+| [New Feature](#newFeature) | [Click Here](https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/blob/F0-aitha/lib/codeCov.js) |
 | [Challenges faced](#challenges_tag) | [Click Here](#challenges_tag) |
 | [Screencast ](#screencast_tag) | [Click Here](#screencast_tag)
-
-
-
-Specify file structure what file contains what info
-
-
 
 ```MAC M1 requirements```
 
@@ -27,78 +19,88 @@ $ /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/
 $ brew install ottomatica/ottomatica/basicvm          # To install basicvm
 ```
 
-```Windows/MAC Intel requirements```
-
-```text
-Choco
-Virtual box
-Nodejs
-Bakerx
-Npm
-```
-
 <a name = "env_file"></a>
 
+## env File
 ```.env file```
 ```bash
-# Add the following env variables for any OS
 vm_name = Name_Of_VM                # Ex: vm-server
 git_token = Git_Token               # Ex: 123adsfh32jjhg
 db_pass = 12345                     # set the password of mysql 
 droplet_name=drops                  # name for the SSH KEY to be placed inside the digital ocean
-DROPLET_TOKEN=dp_ac8be7da.......es  # droplet token genereated from digital ocean 
+DROPLET_TOKEN = dp_ac8be7da.......es  # droplet token genereated from digital ocean
+toAddress = ToAddress@gmail.com       # To Address to which code coverage report is to be sent
+fromAddress = FromAddress@gmail.com   # From Address to be used for coverage report
+mailToken = abcdefghi                 # Token from mail app (Generated using From Address)
 
-# Add the following for Windows and MAC Intel
-ip_address = 192.168.52.100         # Any ip can be assigned
-memory = 4096                       # RAM to be assigned for vm --Recommended to use atleast 4GB
 # Please make sure no comment lines are in .env file
 ```
-<a name = "m3_tag"></a>
-## M3 Tasks
-<a name = "provision_tag"></a>
-## Provisioning on cloud service
-* The [droplet.js](/lib/droplet.js) file is used to provision the instance for a target infrastructure using Digital Ocean as cloud provider. 
-* We are creating droplets with the help of ssh key generated.
-* We are using 3 droplets namely  droplet-blue, droplet-green to deploy the applictaion and monitor droplet to act as proxy server to monitor the health of the application.
-* After creation of droplet in the Digital Ocean webiste, the infrastructure data such as droplet name, droplet id, ip address is stored in an inventory file.
+To Generate mail Token use this link.
 
+<a name = "pipeJobs"></a>
+
+## Pipeline Jobs
+
+### Application-1
 
 ```bash
-pipeline prod up
+pipeline init
+pipeline build recepie-build buildRecepie.yml
+pipeline build recepie-test buildRecepie.yml
+pipeline coverage recepie-coverage buildRecepie.yml
+pipeline deploy inventory recepie-deploy buildRecepie.yml
 ```
 
-<a name = "deployment_tag"></a>
-## iTrust deployment job spec
-
-* The [build.yml](/yaml/build.yml) has the job - itrust-build which is responisble to create a war file for deploying the iTrust application to the cloud instances of blue and green.
-* We also install npm module and node js in monitor droplet and copy the required scripts into monitor droplet.
-* Once, the war file is generated after succesful build and been located, the dependencies such as tomcat JRE, JDK, Maven, Apache, npm, mysql are installed and the respective commands are defined in the [build.yml](/yaml/build.yml) file. And the war is copied to the cloud instances blue and green droplets.
+### Application-2
 
 ```bash
-pipeline build deploy inventory itrust-deploy build.yml
+pipeline init
+pipeline build school-build buildSchool.yml
+pipeline build school-test buildSchool.yml
+pipeline coverage school-coverage buildSchool.yml
+pipeline deploy inventory school-deploy buildSchool.yml
 ```
+```init``` creates a vm
 
-<a name = "strategy_tag"></a>
-## Deployment Strategy
-*   We implemented the blue green deployment strategy along with healthcheck function to keep track of health of the target.
-*   For this purpose our droplets droplet-blue and droplet-green contains the application which is the .war file genereate by execution of the itrust-build, which will be copied to destination droplets and also installs tomcat and restartss the tomcat server on target machines.
-*   The monitor droplets runs the traffic and also checks the health of the target using the serve.js
-*  we monitor the health check and start the proxy to listen on 3590 port, this will be done by monitor droplet another cloud instance.
-*  we start checking the health of the target which is by default assigned to Green, and at some point of time we execute siege script to stress test the target droplet due to which the the droplet hangs for a while, which results in failover and switches to blue droplet.
-*  We monitor this inside the third droplet "monitor" the code can be found at [serve.js](/lib/serve.js)
+Creates a new vm with the name given in the .env file
+
+```build app-build buildApp.yml``` Builds the application
+
+Clones the application and adds patch and builds the application
+
+```build app-test buildApp.yml``` Tests the application
+
+Tests on the application is run and displays the results
+
+```coverage app-coverage buildApp.yml``` Finds the Code Average
+
+Finds code coverage and mails the report the email on .env
+
+```deploy inventory app-deploy buildApp.yml``` Deploys the Application
+
+Deploys the application to the production
+
+<a name = "newFeature"></a>
+
+## New Feature - Code Coverage
+
+```coverage app-coverage buildApp.yml```
+
+A new job has been defined to find the code coverage of the application. The threshold in build.yml determine's if coverage is success or failure. The result can be seen in AppNamePermission.JSON file. The report of the code coverage is sent via email. It also describes whether you can proceed with deployment or not.
+In the event of code coverage not upto the threshold and the user trying to deploy it, the application will terminate with a message informing the same.
+SpringBoot applications use jacoco to generate the code coverage while Angular uses ng --code-coverage to find the code coverage.
+
 <a name = "challenges_tag"></a>
-## Challenges and issues faced
-* we did research a lot to create the droplet using the SSH key generated and then used axios.post to create the droplet using the fingerprint returned by the digital ocean.
-* It was a challenging task to  download tomcat inside the droplets and aslo to copy the war file generated from vm into the droplets
-* We faced issues  due to automating the blue green server ips as serve.js and seige.sh will be executed inside the monitor droplet, which took some time to automate the code so that they can fetch those values.
-* We faced issues with dos2unix for(CRLF error), we fixed this issue by finding.sh files and usage of dos2unix package downloaded.
+
+## Challenges Faced
+
+* It was challenging to write the code coverage function agnostic to the type of application used.
+* Rather than deploying the application it was tough to find a proper application that had test cases.
+* The deployed application was causing trouble when new application was being deployed.
+* Quotations were causing major problem where sometimes it broke the command and sometimes not.
 
 <a name = "screencast_tag"></a>
+
 ## Screencast 
+
 [Click Here](https://youtu.be/OJvqAtbRG1A) for Screencast of MAC M1
-
-Use this if the above is not working - https://youtu.be/OJvqAtbRG1A
-
-[Click Here](https://youtu.be/dHr_4H2M6yM) for Screencast of Windows
-<br>
-Link to Screencast for Windows (If above hyperlink is not working) - https://youtu.be/dHr_4H2M6yM
