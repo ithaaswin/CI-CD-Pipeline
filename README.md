@@ -35,7 +35,7 @@ mailToken = abcdefghi                 # Token from mail app (Generated using Fro
 
 # Please make sure no comment lines are in .env file
 ```
-To Generate mail Token use this link.
+To Generate mail Token use this [link](https://security.google.com/settings/security/apppasswords)
 
 <a name = "pipeJobs"></a>
 
@@ -107,6 +107,7 @@ SpringBoot applications use jacoco to generate the code coverage while Angular u
 A sample of mail generated is:
 
 <img src="https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/blob/F0-aitha/Pictures/mailSample.jpeg" width="400" >
+<img src="https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/blob/F0-aitha/Pictures/mailSample2.jpeg" width="400" >
 
 <a name = "challenges_tag"></a>
 
