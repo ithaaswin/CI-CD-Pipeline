@@ -104,6 +104,10 @@ A new job has been defined to find the code coverage of the application. The thr
 In the event of code coverage not upto the threshold and the user trying to deploy it, the application will terminate with a message informing the same.
 SpringBoot applications use jacoco to generate the code coverage while Angular uses ng --code-coverage to find the code coverage.
 
+A sample of mail generated is:
+
+<img src="https://github.ncsu.edu/CSC-DevOps-S22/DEVOPS-14/blob/F0-aitha/Pictures/mailSample.jpeg" width="400" >
+
 <a name = "challenges_tag"></a>
 
 ## Challenges Faced
