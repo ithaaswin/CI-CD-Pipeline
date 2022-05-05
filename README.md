@@ -43,6 +43,9 @@ To Generate mail Token use this link.
 
 ### Application-1
 
+Source code can be found [here](https://github.com/anvesh-lp/RecepieApp.git)
+It is a spring boot application
+
 ```bash
 pipeline init
 pipeline build recepie-build buildRecepie.yml
@@ -52,6 +55,9 @@ pipeline deploy inventory recepie-deploy buildRecepie.yml
 ```
 
 ### Application-2
+
+Source code can be found [here](https://github.com/OwenKelvin/Angular-School-Management-System.git)
+It is an Angular Application with nodeJS
 
 ```bash
 pipeline init
