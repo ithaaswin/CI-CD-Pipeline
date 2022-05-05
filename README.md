@@ -54,6 +54,7 @@ pipeline init
 pipeline build recepie-build buildRecepie.yml
 pipeline build recepie-test buildRecepie.yml
 pipeline coverage recepie-coverage buildRecepie.yml
+pipeline prod up
 pipeline deploy inventory recepie-deploy buildRecepie.yml
 ```
 
@@ -70,6 +71,7 @@ pipeline init
 pipeline build school-build buildSchool.yml
 pipeline build school-test buildSchool.yml
 pipeline coverage school-coverage buildSchool.yml
+pipeline prod up
 pipeline deploy inventory school-deploy buildSchool.yml
 ```
 ```init``` creates a vm
