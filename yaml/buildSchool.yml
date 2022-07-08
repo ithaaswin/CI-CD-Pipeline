@@ -1,7 +1,8 @@
 setup:
   - sudo apt-get -qqq -o Acquire::Check-Valid-Until=false -o Acquire::Check-Date=false update
   - sudo apt-get -qqq update -y
-  - sudo apt-get -qqq install -y git nodejs npm chromium-browser dos2unix jq
+  - curl -sL https://deb.nodesource.com/setup_14.x | sudo bash -
+  - sudo apt-get -qqq install -y git nodejs chromium-browser dos2unix jq
 
 jobs:
   - name: school-build
